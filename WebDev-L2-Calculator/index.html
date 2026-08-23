@@ -3,57 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator | Oasis Infobyte</title>
+
+    <title>Calculator Web Application</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="calculator-container">
-        <div class="calculator">
-            
-            <div class="calculator-header">
-                <h1>Calculator</h1>
-                <p>Oasis Infobyte Internship Project</p>
+    <div class="app-container">
+
+        <div class="calculator-section">
+
+            <div class="top-bar">
+                <div>
+                    <h1>Calculator</h1>
+                    <p>Smart • Simple • Fast</p>
+                </div>
+
+                <button id="themeToggle" class="theme-btn" title="Toggle Theme">
+                    🌙
+                </button>
             </div>
 
-            <input
-                type="text"
-                id="display"
-                class="display"
-                placeholder="0"
-                readonly
-            >
+            <div class="calculator">
 
-            <div class="buttons">
+                <input
+                    type="text"
+                    id="display"
+                    placeholder="0"
+                    readonly
+                >
 
-                <button class="btn clear" data-action="clear">C</button>
-                <button class="btn operator" data-action="backspace">⌫</button>
-                <button class="btn operator" data-value="%">%</button>
-                <button class="btn operator" data-value="/">÷</button>
+                <div class="buttons">
 
-                <button class="btn number" data-value="7">7</button>
-                <button class="btn number" data-value="8">8</button>
-                <button class="btn number" data-value="9">9</button>
-                <button class="btn operator" data-value="*">×</button>
+                    <button class="special" data-action="clear">AC</button>
+                    <button class="special" data-action="backspace">⌫</button>
+                    <button class="special" data-action="square">x²</button>
+                    <button class="operator" data-value="/">÷</button>
 
-                <button class="btn number" data-value="4">4</button>
-                <button class="btn number" data-value="5">5</button>
-                <button class="btn number" data-value="6">6</button>
-                <button class="btn operator" data-value="-">−</button>
+                    <button class="special" data-action="sqrt">√</button>
+                    <button data-value="7">7</button>
+                    <button data-value="8">8</button>
+                    <button data-value="9">9</button>
 
-                <button class="btn number" data-value="1">1</button>
-                <button class="btn number" data-value="2">2</button>
-                <button class="btn number" data-value="3">3</button>
-                <button class="btn operator" data-value="+">+</button>
+                    <button class="operator" data-value="*">×</button>
+                    <button data-value="4">4</button>
+                    <button data-value="5">5</button>
+                    <button data-value="6">6</button>
 
-                <button class="btn number zero" data-value="0">0</button>
-                <button class="btn number" data-value=".">.</button>
-                <button class="btn equal" data-action="calculate">=</button>
+                    <button class="operator" data-value="-">−</button>
+                    <button data-value="1">1</button>
+                    <button data-value="2">2</button>
+                    <button data-value="3">3</button>
+
+                    <button class="operator" data-value="+">+</button>
+                    <button class="zero" data-value="0">0</button>
+                    <button data-value=".">.</button>
+                    <button class="equal" data-action="calculate">=</button>
+
+                </div>
 
             </div>
+
         </div>
+
+        <div class="history-section">
+
+            <div class="history-header">
+                <h2>History</h2>
+                <button id="clearHistory">Clear</button>
+            </div>
+
+            <div id="historyList">
+                <p class="empty-history">No calculations yet</p>
+            </div>
+
+        </div>
+
     </div>
 
     <script src="script.js"></script>
