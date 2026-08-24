@@ -1,22 +1,43 @@
-# Calculator Web Application
+# Calculator Web Application 🧮
 
-This project is created as part of my Oasis Infobyte Web Development and Designing Internship.
+A modern and responsive Calculator Web Application developed as part of the **Oasis Infobyte Web Development and Designing Internship**.
 
-## Task
-Level 2 - Task 1: Calculator
+## 🚀 Live Demo
 
-## Features
-- Addition
-- Subtraction
-- Multiplication
-- Division
-- Clear button
-- Responsive design
+🔗 [View Live Project](https://ishakamalih-blip.github.io/OIBSIP/WebDev-L2-Calculator/)
 
-## Technologies Used
-- HTML
-- CSS
+## 📌 Task Details
+
+**Level 2 – Task 1: Calculator**
+
+The application performs basic arithmetic calculations along with additional mathematical functions.
+
+## ✨ Features
+
+- ➕ Addition
+- ➖ Subtraction
+- ✖️ Multiplication
+- ➗ Division
+- √ Square Root
+- x² Square Function
+- 🧹 Clear Calculator
+- 🗑️ Delete Last Input
+- 📜 Calculation History
+- 🌙 Dark / Light Mode
+- 📱 Responsive Design
+
+## 🛠️ Technologies Used
+
+- HTML5
+- CSS3
 - JavaScript
 
-## Author
-Isha Kamalia
+## 📂 Project Structure
+
+```text
+WebDev-L2-Calculator/
+│
+├── index.html
+├── style.css
+├── script.js
+└── README.md
