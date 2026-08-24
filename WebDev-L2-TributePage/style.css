@@ -1,0 +1,141 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #222;
+    line-height: 1.6;
+}
+
+/* Hero Section */
+.hero {
+    height: 420px;
+    background: linear-gradient(135deg, #0f172a, #1e3a5f, #2563eb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.overlay {
+    padding: 30px;
+}
+
+.hero h1 {
+    font-size: 52px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 22px;
+    opacity: 0.9;
+}
+
+.years {
+    margin-top: 10px;
+    font-size: 18px !important;
+    letter-spacing: 3px;
+}
+
+/* Main Container */
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 60px 20px;
+}
+
+section {
+    margin-bottom: 50px;
+}
+
+h2 {
+    color: #1e3a8a;
+    font-size: 30px;
+    margin-bottom: 15px;
+    border-left: 5px solid #2563eb;
+    padding-left: 12px;
+}
+
+.intro,
+.about {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+/* Achievement Cards */
+.cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card {
+    flex: 1;
+    min-width: 250px;
+    background: white;
+    padding: 30px 25px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(37, 99, 235, 0.2);
+}
+
+.card h3 {
+    color: #2563eb;
+    margin-bottom: 12px;
+    font-size: 22px;
+}
+
+/* Quote Section */
+.quote {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: white;
+    padding: 45px 30px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+blockquote {
+    font-size: 25px;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+/* Footer */
+footer {
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 38px;
+    }
+
+    .hero p {
+        font-size: 18px;
+    }
+
+    .cards {
+        flex-direction: column;
+    }
+
+    blockquote {
+        font-size: 20px;
+    }
+}
