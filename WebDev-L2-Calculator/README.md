@@ -23,6 +23,9 @@ The project combines essential calculator operations with a clean UI, calculatio
 
 ### Smart Calculation History
 Every calculation is automatically stored and displayed in the History panel.
+## 🌐 Live Demo
+
+👉 [🚀 Open Smart Calculator](https://ishakamalih-blip.github.io/OIBSIP/WebDev-L2-Calculator/)
 
 Example:
 
