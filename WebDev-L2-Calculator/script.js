@@ -1,155 +1,83 @@
 const display = document.getElementById("display");
+const expression = document.getElementById("expression");
 const buttons = document.querySelectorAll(".buttons button");
+
 const themeToggle = document.getElementById("themeToggle");
+const copyResult = document.getElementById("copyResult");
+
 const historyList = document.getElementById("historyList");
-const clearHistoryBtn = document.getElementById("clearHistory");
+const clearHistory = document.getElementById("clearHistory");
+const historyCount = document.getElementById("historyCount");
 
 let currentInput = "";
 let history = JSON.parse(localStorage.getItem("calculatorHistory")) || [];
 
-// Load history when page opens
-renderHistory();
 
-// Calculator button events
-buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-        const value = button.dataset.value;
-        const action = button.dataset.action;
+/* ================= DISPLAY ================= */
 
-        if (action === "clear") {
-            currentInput = "";
-            display.value = "";
-            return;
-        }
-
-        if (action === "backspace") {
-            currentInput = currentInput.slice(0, -1);
-            display.value = currentInput;
-            return;
-        }
-
-        if (action === "calculate") {
-            calculateResult();
-            return;
-        }
-
-        if (action === "square") {
-            squareNumber();
-            return;
-        }
-
-        if (action === "sqrt") {
-            squareRoot();
-            return;
-        }
-
-        if (value !== undefined) {
-            handleInput(value);
-        }
-    });
-});
-
-// Handle number and operator input
-function handleInput(value) {
-    const operators = ["+", "-", "*", "/", "%"];
-    const lastCharacter = currentInput.slice(-1);
-
-    if (operators.includes(value) && operators.includes(lastCharacter)) {
-        currentInput = currentInput.slice(0, -1) + value;
-    } else {
-        currentInput += value;
-    }
-
-    display.value = currentInput;
+function updateDisplay() {
+    display.value = currentInput || "";
 }
 
-// Calculate result
-function calculateResult() {
-    if (currentInput === "") return;
+
+/* ================= CALCULATE ================= */
+
+function calculate() {
+
+    if (!currentInput) return;
 
     try {
-        const expression = currentInput;
 
-        // Prevent unsafe characters
-        if (!/^[0-9+\-*/%.() ]+$/.test(expression)) {
-            throw new Error("Invalid expression");
-        }
+        const originalExpression = currentInput;
 
         const result = Function(
-            `"use strict"; return (${expression})`
+            `"use strict"; return (${currentInput})`
         )();
 
         if (!Number.isFinite(result)) {
-            throw new Error("Invalid result");
+            throw new Error("Invalid calculation");
         }
 
-        addToHistory(expression, result);
+        const formattedResult =
+            Number.isInteger(result)
+                ? result
+                : Number(result.toFixed(8));
 
-        currentInput = String(result);
-        display.value = currentInput;
+        expression.textContent = originalExpression
+            .replace(/\*/g, "×")
+            .replace(/\//g, "÷");
 
-    } catch (error) {
+        currentInput = formattedResult.toString();
+
+        updateDisplay();
+
+        addToHistory(
+            originalExpression,
+            formattedResult
+        );
+
+    } catch {
+
         display.value = "Error";
-        currentInput = "";
+
+        setTimeout(() => {
+            currentInput = "";
+            updateDisplay();
+        }, 1000);
     }
 }
 
-// Square current number
-function squareNumber() {
-    try {
-        if (currentInput === "") return;
 
-        const number = Number(currentInput);
+/* ================= HISTORY ================= */
 
-        if (!Number.isFinite(number)) {
-            throw new Error("Invalid number");
-        }
+function addToHistory(exp, result) {
 
-        const result = number * number;
-
-        addToHistory(`${number}²`, result);
-
-        currentInput = String(result);
-        display.value = currentInput;
-
-    } catch (error) {
-        display.value = "Error";
-        currentInput = "";
-    }
-}
-
-// Square root
-function squareRoot() {
-    try {
-        if (currentInput === "") return;
-
-        const number = Number(currentInput);
-
-        if (!Number.isFinite(number) || number < 0) {
-            throw new Error("Invalid number");
-        }
-
-        const result = Math.sqrt(number);
-
-        addToHistory(`√${number}`, result);
-
-        currentInput = String(result);
-        display.value = currentInput;
-
-    } catch (error) {
-        display.value = "Error";
-        currentInput = "";
-    }
-}
-
-// Add calculation to history
-function addToHistory(expression, result) {
     history.unshift({
-        expression: expression,
+        expression: exp,
         result: result
     });
 
-    // Keep only last 10 calculations
+    // Keep only latest 10 calculations
     history = history.slice(0, 10);
 
     localStorage.setItem(
@@ -160,79 +88,279 @@ function addToHistory(expression, result) {
     renderHistory();
 }
 
-// Display history
+
 function renderHistory() {
+
+    historyList.innerHTML = "";
+
     if (history.length === 0) {
-        historyList.innerHTML =
-            `<p class="empty-history">No calculations yet</p>`;
+
+        historyList.innerHTML = `
+            <div class="empty-history">
+                <div class="empty-icon">🧮</div>
+
+                <p>No calculations yet</p>
+
+                <small>
+                    Your calculation history will appear here.
+                </small>
+            </div>
+        `;
+
+        historyCount.textContent = "0 calculations";
+
         return;
     }
 
-    historyList.innerHTML = history
-        .map((item, index) => {
-            return `
-                <div class="history-item" data-index="${index}">
-                    <div class="history-expression">
-                        ${item.expression}
-                    </div>
-                    <div class="history-result">
-                        = ${item.result}
-                    </div>
-                </div>
-            `;
-        })
-        .join("");
+    historyCount.textContent =
+        `${history.length} calculation${history.length !== 1 ? "s" : ""}`;
 
-    // Click history item to reuse result
-    document.querySelectorAll(".history-item").forEach((item) => {
-        item.addEventListener("click", () => {
-            const index = item.dataset.index;
-            currentInput = String(history[index].result);
-            display.value = currentInput;
-        });
+    history.forEach(item => {
+
+        const historyItem = document.createElement("div");
+
+        historyItem.className = "history-item";
+
+        historyItem.innerHTML = `
+            <div class="history-expression">
+                ${item.expression
+                    .replace(/\*/g, "×")
+                    .replace(/\//g, "÷")}
+            </div>
+
+            <div class="history-result">
+                = ${item.result}
+            </div>
+        `;
+
+        historyList.appendChild(historyItem);
     });
 }
 
-// Clear history
-clearHistoryBtn.addEventListener("click", () => {
-    history = [];
-    localStorage.removeItem("calculatorHistory");
-    renderHistory();
+
+/* ================= BUTTONS ================= */
+
+buttons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        const value = button.dataset.value;
+        const action = button.dataset.action;
+
+
+        // Number / operator / decimal
+        if (value !== undefined) {
+
+            currentInput += value;
+
+            updateDisplay();
+
+            return;
+        }
+
+
+        // Clear
+        if (action === "clear") {
+
+            currentInput = "";
+            expression.textContent = "Ready to calculate...";
+
+            updateDisplay();
+
+            return;
+        }
+
+
+        // Backspace
+        if (action === "backspace") {
+
+            currentInput = currentInput.slice(0, -1);
+
+            updateDisplay();
+
+            return;
+        }
+
+
+        // Square
+        if (action === "square") {
+
+            if (!currentInput) return;
+
+            currentInput = `(${currentInput})**2`;
+
+            calculate();
+
+            return;
+        }
+
+
+        // Square root
+        if (action === "sqrt") {
+
+            if (!currentInput) return;
+
+            try {
+
+                const number = Number(currentInput);
+
+                if (number < 0) throw new Error();
+
+                const result = Math.sqrt(number);
+
+                expression.textContent = `√${number}`;
+
+                currentInput = result.toString();
+
+                updateDisplay();
+
+                addToHistory(`√${number}`, result);
+
+            } catch {
+
+                display.value = "Error";
+            }
+
+            return;
+        }
+
+
+        // Equal
+        if (action === "calculate") {
+
+            calculate();
+
+        }
+
+    });
+
 });
 
-// Dark / Light mode
-themeToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
 
-    if (document.body.classList.contains("dark-mode")) {
-        themeToggle.textContent = "☀️";
-        localStorage.setItem("calculatorTheme", "dark");
-    } else {
-        themeToggle.textContent = "🌙";
-        localStorage.setItem("calculatorTheme", "light");
-    }
-});
+/* ================= KEYBOARD SUPPORT ================= */
 
-// Load saved theme
-if (localStorage.getItem("calculatorTheme") === "dark") {
-    document.body.classList.add("dark-mode");
-    themeToggle.textContent = "☀️";
-}
-
-// Keyboard support
 document.addEventListener("keydown", (event) => {
+
     const key = event.key;
 
-    if (/[0-9]/.test(key) || [".", "+", "-", "*", "/", "%"].includes(key)) {
-        handleInput(key);
-    } else if (key === "Enter" || key === "=") {
-        event.preventDefault();
-        calculateResult();
-    } else if (key === "Backspace") {
-        currentInput = currentInput.slice(0, -1);
-        display.value = currentInput;
-    } else if (key === "Escape") {
-        currentInput = "";
-        display.value = "";
+    if (
+        /^[0-9.]$/.test(key) ||
+        ["+", "-", "*", "/"].includes(key)
+    ) {
+
+        currentInput += key;
+
+        updateDisplay();
+
+        return;
     }
+
+
+    if (key === "Enter" || key === "=") {
+
+        event.preventDefault();
+
+        calculate();
+
+        return;
+    }
+
+
+    if (key === "Backspace") {
+
+        currentInput = currentInput.slice(0, -1);
+
+        updateDisplay();
+
+        return;
+    }
+
+
+    if (key === "Escape") {
+
+        currentInput = "";
+
+        expression.textContent = "Ready to calculate...";
+
+        updateDisplay();
+
+    }
+
 });
+
+
+/* ================= COPY RESULT ================= */
+
+copyResult.addEventListener("click", async () => {
+
+    if (!currentInput) return;
+
+    try {
+
+        await navigator.clipboard.writeText(currentInput);
+
+        copyResult.textContent = "✓";
+
+        setTimeout(() => {
+            copyResult.textContent = "📋";
+        }, 1200);
+
+    } catch {
+
+        alert("Unable to copy result.");
+
+    }
+
+});
+
+
+/* ================= CLEAR HISTORY ================= */
+
+clearHistory.addEventListener("click", () => {
+
+    if (history.length === 0) return;
+
+    history = [];
+
+    localStorage.removeItem("calculatorHistory");
+
+    renderHistory();
+
+});
+
+
+/* ================= DARK MODE ================= */
+
+const savedTheme = localStorage.getItem("calculatorTheme");
+
+if (savedTheme === "dark") {
+
+    document.body.classList.add("dark");
+
+    themeToggle.textContent = "☀️";
+
+}
+
+
+themeToggle.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark");
+
+    const isDark =
+        document.body.classList.contains("dark");
+
+    themeToggle.textContent =
+        isDark ? "☀️" : "🌙";
+
+    localStorage.setItem(
+        "calculatorTheme",
+        isDark ? "dark" : "light"
+    );
+
+});
+
+
+/* ================= INITIALIZE ================= */
+
+renderHistory();
+updateDisplay();
