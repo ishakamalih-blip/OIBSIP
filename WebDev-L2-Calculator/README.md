@@ -1,43 +1,37 @@
-# Calculator Web Application 🧮
+# 🧮 Smart Calculator
 
-A modern and responsive Calculator Web Application developed as part of the **Oasis Infobyte Web Development and Designing Internship**.
+A modern, responsive and interactive calculator web application built with HTML, CSS and JavaScript.
 
-## 🚀 Live Demo
-
-🔗 [View Live Project](https://ishakamalih-blip.github.io/OIBSIP/WebDev-L2-Calculator/)
-
-## 📌 Task Details
-
-**Level 2 – Task 1: Calculator**
-
-The application performs basic arithmetic calculations along with additional mathematical functions.
+The project combines essential calculator operations with a clean UI, calculation history, keyboard support, dark mode and persistent local storage.
 
 ## ✨ Features
 
-- ➕ Addition
-- ➖ Subtraction
-- ✖️ Multiplication
-- ➗ Division
-- √ Square Root
-- x² Square Function
-- 🧹 Clear Calculator
-- 🗑️ Delete Last Input
-- 📜 Calculation History
-- 🌙 Dark / Light Mode
-- 📱 Responsive Design
+- ➕ Addition, subtraction, multiplication and division
+- √ Square root
+- x² Square calculation
+- ⌫ Backspace functionality
+- 🌙 Light / Dark mode
+- ⌨️ Keyboard support
+- 📋 Copy result to clipboard
+- 🕘 Calculation history
+- 💾 History persistence using LocalStorage
+- 🧹 Clear calculation history
+- 📱 Fully responsive design
+- ✨ Interactive button animations
 
-## 🛠️ Technologies Used
+## 🎨 Highlights
 
-- HTML5
-- CSS3
-- JavaScript
+### Smart Calculation History
+Every calculation is automatically stored and displayed in the History panel.
 
-## 📂 Project Structure
+Example:
 
 ```text
-WebDev-L2-Calculator/
-│
-├── index.html
-├── style.css
-├── script.js
-└── README.md
+25 + 75
+= 100
+
+√144
+= 12
+
+12 × 5
+= 60
