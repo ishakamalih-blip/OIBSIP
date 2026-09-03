@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Calculator Web Application</title>
+    <title>Smart Calculator | Isha Kamalia</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,77 +14,213 @@
 
     <div class="app-container">
 
+        <!-- ================= CALCULATOR ================= -->
+
         <div class="calculator-section">
 
             <div class="top-bar">
+
                 <div>
-                    <h1>Calculator</h1>
+                    <h1>Calculator <span>✨</span></h1>
                     <p>Smart • Simple • Fast</p>
                 </div>
 
-                <button id="themeToggle" class="theme-btn" title="Toggle Theme">
+                <button id="themeToggle"
+                        class="theme-btn"
+                        title="Toggle Theme">
                     🌙
                 </button>
+
             </div>
+
 
             <div class="calculator">
 
-                <input
-                    type="text"
-                    id="display"
-                    placeholder="0"
-                    readonly
-                >
+                <!-- Display -->
+
+                <div class="display-container">
+
+                    <div id="expression" class="expression">
+                        Ready to calculate...
+                    </div>
+
+                    <input
+                        type="text"
+                        id="display"
+                        placeholder="0"
+                        readonly
+                    >
+
+                    <button
+                        id="copyResult"
+                        class="copy-btn"
+                        title="Copy Result">
+                        📋
+                    </button>
+
+                </div>
+
+
+                <!-- Calculator Buttons -->
 
                 <div class="buttons">
 
-                    <button class="special" data-action="clear">AC</button>
-                    <button class="special" data-action="backspace">⌫</button>
-                    <button class="special" data-action="square">x²</button>
-                    <button class="operator" data-value="/">÷</button>
+                    <!-- Row 1 -->
 
-                    <button class="special" data-action="sqrt">√</button>
+                    <button
+                        class="special"
+                        data-action="clear">
+                        AC
+                    </button>
+
+                    <button
+                        class="special"
+                        data-action="backspace">
+                        ⌫
+                    </button>
+
+                    <button
+                        class="special"
+                        data-action="square">
+                        x²
+                    </button>
+
+                    <button
+                        class="operator"
+                        data-value="/">
+                        ÷
+                    </button>
+
+
+                    <!-- Row 2 -->
+
+                    <button
+                        class="special"
+                        data-action="sqrt">
+                        √
+                    </button>
+
                     <button data-value="7">7</button>
                     <button data-value="8">8</button>
                     <button data-value="9">9</button>
 
-                    <button class="operator" data-value="*">×</button>
+
+                    <!-- Row 3 -->
+
+                    <button
+                        class="operator"
+                        data-value="*">
+                        ×
+                    </button>
+
                     <button data-value="4">4</button>
                     <button data-value="5">5</button>
                     <button data-value="6">6</button>
 
-                    <button class="operator" data-value="-">−</button>
+
+                    <!-- Row 4 -->
+
+                    <button
+                        class="operator"
+                        data-value="-">
+                        −
+                    </button>
+
                     <button data-value="1">1</button>
                     <button data-value="2">2</button>
                     <button data-value="3">3</button>
 
-                    <button class="operator" data-value="+">+</button>
-                    <button class="zero" data-value="0">0</button>
+
+                    <!-- Row 5 -->
+
+                    <button
+                        class="operator"
+                        data-value="+">
+                        +
+                    </button>
+
+                    <button
+                        class="zero"
+                        data-value="0">
+                        0
+                    </button>
+
                     <button data-value=".">.</button>
-                    <button class="equal" data-action="calculate">=</button>
+
+                    <button
+                        class="equal"
+                        data-action="calculate">
+                        =
+                    </button>
 
                 </div>
 
             </div>
 
+
+            <!-- Keyboard Hint -->
+
+            <div class="keyboard-hint">
+                ⌨️ Tip: Use your keyboard for faster calculations
+            </div>
+
         </div>
+
+
+        <!-- ================= HISTORY ================= -->
 
         <div class="history-section">
 
             <div class="history-header">
-                <h2>History</h2>
-                <button id="clearHistory">Clear</button>
+
+                <div>
+                    <h2>History</h2>
+                    <span id="historyCount">
+                        0 calculations
+                    </span>
+                </div>
+
+                <button id="clearHistory">
+                    Clear
+                </button>
+
             </div>
 
+
             <div id="historyList">
-                <p class="empty-history">No calculations yet</p>
+
+                <div class="empty-history">
+
+                    <div class="empty-icon">
+                        🧮
+                    </div>
+
+                    <p>No calculations yet</p>
+
+                    <small>
+                        Your calculation history will appear here.
+                    </small>
+
+                </div>
+
             </div>
 
         </div>
 
     </div>
 
+
+    <!-- Footer -->
+
+    <footer>
+        <p>
+            Built with ❤️ using HTML, CSS & JavaScript
+        </p>
+    </footer>
+
+
     <script src="script.js"></script>
 
 </body>
+
 </html>
