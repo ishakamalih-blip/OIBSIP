@@ -1,52 +1,476 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Todo App</title>
+
+    <title>TaskFlow | Smart Productivity</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <div class="app-container">
-        <div class="todo-card">
+    <!-- ================= NAVBAR ================= -->
 
-            <div class="header">
-                <div>
-                    <h1>My Tasks ✨</h1>
-                    <p>Stay organized. Get things done.</p>
-                </div>
-                <div class="task-count">
-                    <span id="taskCount">0</span>
-                    <small>Tasks</small>
-                </div>
+    <nav class="navbar">
+
+        <a href="#dashboard" class="brand">
+            <span class="brand-icon">✦</span>
+            <span>Task<span>Flow</span></span>
+        </a>
+
+        <div class="nav-links">
+
+            <a href="#dashboard">Dashboard</a>
+
+            <a href="#about">About</a>
+
+            <a href="#features">Features</a>
+
+            <a href="#tasks">Tasks</a>
+
+            <a href="#search">Search</a>
+
+        </div>
+
+        <button id="themeToggle" class="theme-btn" title="Toggle Theme">
+            ☾
+        </button>
+
+    </nav>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboard" class="section dashboard-section">
+
+            <div class="hero-content">
+
+                <p class="eyebrow">
+                    MY PRODUCTIVITY SPACE
+                </p>
+
+                <h1>
+                    Welcome back, <span>Isha</span> 👋
+                </h1>
+
+                <p class="hero-subtitle">
+                    Organize your day. Focus on what matters.
+                </p>
+
+                <a href="#tasks" class="primary-btn">
+                    + Create New Task
+                </a>
+
             </div>
 
-            <div class="input-section">
+
+            <!-- Statistics -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">📋</div>
+
+                    <div>
+                        <span id="totalTasks">0</span>
+                        <p>Total Tasks</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">⏳</div>
+
+                    <div>
+                        <span id="pendingTasks">0</span>
+                        <p>Pending Tasks</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">✓</div>
+
+                    <div>
+                        <span id="completedTasks">0</span>
+                        <p>Completed</p>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card progress-card">
+
+                    <div class="stat-icon">⚡</div>
+
+                    <div>
+                        <span id="progressPercent">0%</span>
+                        <p>Progress</p>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Progress -->
+
+            <div class="progress-box">
+
+                <div class="progress-header">
+
+                    <div>
+                        <p>Today's Progress</p>
+                        <small>Keep going — you're doing great!</small>
+                    </div>
+
+                    <strong id="progressText">0%</strong>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        id="progressBar"
+                        class="progress-bar"
+                        style="width: 0%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ABOUT ================= -->
+
+        <section id="about" class="section">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">ABOUT TASKFLOW</p>
+
+                <h2>
+                    Plan better. <span>Achieve more.</span>
+                </h2>
+
+                <p>
+                    TaskFlow is a smart productivity application designed
+                    to help you organize your daily tasks, manage priorities
+                    and track your progress efficiently.
+                </p>
+
+            </div>
+
+
+            <div class="about-card">
+
+                <div class="about-icon">
+                    ✦
+                </div>
+
+                <div>
+
+                    <h3>
+                        Your personal productivity space
+                    </h3>
+
+                    <p>
+                        Create tasks, set priorities, search your work,
+                        track completed activities and stay focused
+                        throughout your day.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= FEATURES ================= -->
+
+        <section id="features" class="section">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">POWERFUL FEATURES</p>
+
+                <h2>
+                    Everything you need to
+                    <span>stay productive.</span>
+                </h2>
+
+            </div>
+
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">➕</div>
+
+                    <h3>Smart Task Creation</h3>
+
+                    <p>
+                        Quickly create and organize your daily tasks.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">🎯</div>
+
+                    <h3>Priority Management</h3>
+
+                    <p>
+                        Set Low, Medium or High priority for your tasks.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">🔍</div>
+
+                    <h3>Quick Search</h3>
+
+                    <p>
+                        Find any task instantly using smart search.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">📊</div>
+
+                    <h3>Progress Tracking</h3>
+
+                    <p>
+                        Monitor completed, pending and total tasks.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">✅</div>
+
+                    <h3>Task Completion</h3>
+
+                    <p>
+                        Mark tasks complete and track your achievements.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">🌙</div>
+
+                    <h3>Theme Mode</h3>
+
+                    <p>
+                        Switch between comfortable light and dark themes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= TASKS ================= -->
+
+        <section id="tasks" class="section">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">TASK MANAGEMENT</p>
+
+                <h2>
+                    Turn plans into
+                    <span>progress.</span>
+                </h2>
+
+            </div>
+
+
+            <!-- Add Task -->
+
+            <div class="add-task-card">
+
                 <input
                     type="text"
                     id="taskInput"
-                    placeholder="What do you need to do?"
+                    placeholder="What do you want to accomplish today?"
                 >
-                <button id="addBtn">+ Add</button>
+
+                <select id="priority">
+
+                    <option value="low">
+                        🟢 Low
+                    </option>
+
+                    <option value="medium" selected>
+                        🟡 Medium
+                    </option>
+
+                    <option value="high">
+                        🔴 High
+                    </option>
+
+                </select>
+
+                <button id="addTaskBtn">
+                    + Add Task
+                </button>
+
             </div>
 
-            <div class="filter-section">
-                <button class="filter active" data-filter="all">All</button>
-                <button class="filter" data-filter="active">Active</button>
-                <button class="filter" data-filter="completed">Completed</button>
+
+            <!-- Filters -->
+
+            <div class="task-filters">
+
+                <button
+                    class="filter-btn active"
+                    data-filter="all">
+                    All
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-filter="active">
+                    Pending
+                </button>
+
+                <button
+                    class="filter-btn"
+                    data-filter="completed">
+                    Completed
+                </button>
+
             </div>
 
-            <ul id="taskList"></ul>
 
-            <div class="footer">
-                <span id="pendingTasks">0 tasks remaining</span>
-                <button id="clearCompleted">Clear Completed</button>
+            <!-- Task List -->
+
+            <div id="taskList" class="task-list"></div>
+
+
+            <!-- Empty State -->
+
+            <div id="emptyState" class="empty-state">
+
+                <div class="empty-icon">
+                    ✓
+                </div>
+
+                <h3>
+                    Your day is clear!
+                </h3>
+
+                <p>
+                    Add your first task and start making progress.
+                </p>
+
             </div>
 
+        </section>
+
+
+
+        <!-- ================= SEARCH ================= -->
+
+        <section id="search" class="section search-section">
+
+            <div class="section-heading">
+
+                <p class="eyebrow">FIND YOUR TASK</p>
+
+                <h2>
+                    Search your
+                    <span>productivity.</span>
+                </h2>
+
+                <p>
+                    Quickly find any task from your productivity list.
+                </p>
+
+            </div>
+
+
+            <div class="search-box">
+
+                <span>🔍</span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search your tasks..."
+                >
+
+            </div>
+
+
+            <p class="search-hint">
+                Type a keyword to search through your tasks.
+            </p>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="footer-brand">
+            ✦ TaskFlow
         </div>
-    </div>
+
+        <p>
+            Organize your day. Focus on what matters.
+        </p>
+
+        <small>
+            Built with HTML, CSS & JavaScript • © 2026 Isha Kamalia
+        </small>
+
+    </footer>
+
 
     <script src="script.js"></script>
+
 </body>
+
 </html>
