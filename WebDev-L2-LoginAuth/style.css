@@ -1,6 +1,6 @@
-/* =========================
-   RESET
-========================= */
+/* ================================
+   authFlow - Modern Dark UI
+================================ */
 
 * {
     margin: 0;
@@ -8,373 +8,397 @@
     box-sizing: border-box;
 }
 
+:root {
+    --bg: #08090d;
+    --card: rgba(18, 20, 27, 0.88);
+    --border: rgba(255, 255, 255, 0.09);
+    --text: #f5f7fb;
+    --muted: #8f96a3;
+    --accent: #7c5cff;
+    --accent-light: #9b82ff;
+    --input: #11131a;
+    --danger: #ff5c70;
+}
+
 body {
-    font-family: "Segoe UI", Arial, sans-serif;
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #1f2937;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    transition: 0.4s ease;
-}
+    background:
+        radial-gradient(circle at 20% 20%, rgba(124, 92, 255, 0.12), transparent 32%),
+        radial-gradient(circle at 80% 80%, rgba(76, 108, 255, 0.08), transparent 30%),
+        var(--bg);
+    color: var(--text);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
-/* =========================
-   MAIN CONTAINER
-========================= */
-
-.app-container {
-    width: 100%;
-    max-width: 1000px;
-    display: grid;
-    grid-template-columns: 1.4fr 0.8fr;
-    gap: 25px;
-    align-items: stretch;
-}
-
-/* =========================
-   CALCULATOR SECTION
-========================= */
-
-.calculator-section,
-.history-section {
-    background: rgba(255, 255, 255, 0.96);
-    border-radius: 28px;
-    padding: 28px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-}
-
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.top-bar h1 {
-    font-size: 32px;
-    color: #20263d;
-    letter-spacing: -1px;
-}
-
-.top-bar p {
-    margin-top: 5px;
-    color: #7c83a1;
-    font-size: 14px;
-}
-
-/* =========================
-   THEME BUTTON
-========================= */
-
-.theme-btn {
-    width: 48px;
-    height: 48px;
-    border: none;
-    border-radius: 50%;
-    background: #eef0ff;
-    font-size: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.theme-btn:hover {
-    transform: rotate(20deg) scale(1.08);
-    background: #dfe3ff;
-}
-
-/* =========================
-   CALCULATOR
-========================= */
-
-.calculator {
-    background: #f5f6fb;
-    padding: 20px;
-    border-radius: 22px;
-}
-
-/* =========================
-   DISPLAY
-========================= */
-
-#display {
-    width: 100%;
-    height: 85px;
-    border: none;
-    outline: none;
-    border-radius: 18px;
-    background: #20263d;
-    color: white;
-    font-size: 34px;
-    font-weight: 600;
-    text-align: right;
-    padding: 15px 20px;
-    margin-bottom: 18px;
-    box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-#display::placeholder {
-    color: #9da4bd;
-}
-
-/* =========================
-   BUTTON GRID
-========================= */
-
-.buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-}
-
-.buttons button {
-    height: 62px;
-    border: none;
-    border-radius: 16px;
-    background: white;
-    color: #30364f;
-    font-size: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.2s ease;
-}
-
-.buttons button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.13);
-}
-
-.buttons button:active {
-    transform: scale(0.94);
-}
-
-/* =========================
-   SPECIAL BUTTONS
-========================= */
-
-.buttons .special {
-    background: #e9ebff;
-    color: #5b63d3;
-}
-
-.buttons .operator {
-    background: #dddfff;
-    color: #575fd1;
-    font-size: 24px;
-}
-
-.buttons .equal {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    font-size: 25px;
-}
-
-.buttons .zero {
-    grid-column: span 1;
-}
-
-/* =========================
-   HISTORY
-========================= */
-
-.history-section {
-    min-height: 100%;
-}
-
-.history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 22px;
-}
-
-.history-header h2 {
-    font-size: 25px;
-    color: #20263d;
-}
-
-#clearHistory {
-    border: none;
-    background: #ffe5e7;
-    color: #e0525b;
-    padding: 9px 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
-}
-
-#clearHistory:hover {
-    background: #ffd2d5;
-    transform: translateY(-2px);
-}
-
-#historyList {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    max-height: 430px;
-    overflow-y: auto;
+    align-items: center;
+
+    overflow-x: hidden;
 }
 
-.empty-history {
+/* Background glow */
+
+.background-glow {
+    position: fixed;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+
+    background: rgba(124, 92, 255, 0.08);
+    filter: blur(100px);
+
+    top: 35%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* ================================
+   Logo
+================================ */
+
+.logo {
+    width: min(900px, 90%);
+    padding: 32px 0;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.logo-box {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: linear-gradient(
+        135deg,
+        var(--accent),
+        var(--accent-light)
+    );
+
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+
+    box-shadow: 0 8px 25px rgba(124, 92, 255, 0.25);
+}
+
+/* ================================
+   Main Container
+================================ */
+
+.auth-container {
+    width: 100%;
+    max-width: 430px;
+
+    padding: 40px 20px;
+
+    display: flex;
+    justify-content: center;
+}
+
+/* ================================
+   Authentication Card
+================================ */
+
+.auth-card {
+    width: 100%;
+
+    padding: 38px;
+
+    background: var(--card);
+
+    border: 1px solid var(--border);
+    border-radius: 24px;
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+    animation: cardIn 0.45s ease;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+/* ================================
+   Header
+================================ */
+
+.card-header {
     text-align: center;
-    color: #9aa0b5;
-    padding: 35px 10px;
+    margin-bottom: 30px;
+}
+
+.card-header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+
+    margin-bottom: 8px;
+}
+
+.card-header p {
+    color: var(--muted);
     font-size: 14px;
 }
 
-/* =========================
-   HISTORY ITEMS
-========================= */
+/* ================================
+   Input
+================================ */
 
-.history-item {
-    background: #f6f7fb;
-    border-radius: 14px;
-    padding: 14px 16px;
-    border-left: 4px solid #667eea;
+.input-group {
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #c8ccd5;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.input-group input {
+    width: 100%;
+    height: 48px;
+
+    padding: 0 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    outline: none;
+
+    background: var(--input);
+    color: var(--text);
+
+    font-size: 14px;
+
+    transition: 0.25s ease;
+}
+
+.input-group input::placeholder {
+    color: #646a76;
+}
+
+.input-group input:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px rgba(124, 92, 255, 0.12);
+}
+
+/* ================================
+   Password
+================================ */
+
+.password-box {
+    position: relative;
+}
+
+.password-box input {
+    padding-right: 48px;
+}
+
+.eye-btn {
+    position: absolute;
+
+    right: 8px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: transparent;
+    color: #858b98;
+
+    cursor: pointer;
+
     transition: 0.2s;
 }
 
-.history-item:hover {
-    transform: translateX(4px);
-    background: #eef0ff;
+.eye-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
 }
 
-.history-expression {
-    color: #777e98;
+/* ================================
+   Main Button
+================================ */
+
+.main-btn {
+    width: 100%;
+    height: 48px;
+
+    margin-top: 6px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        var(--accent),
+        var(--accent-light)
+    );
+
+    color: white;
+
     font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 25px rgba(124, 92, 255, 0.20);
+
+    transition: 0.25s ease;
 }
 
-.history-result {
-    color: #252b43;
-    font-size: 19px;
-    font-weight: 700;
-    margin-top: 4px;
+.main-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 32px rgba(124, 92, 255, 0.30);
 }
 
-/* =========================
-   SCROLLBAR
-========================= */
-
-#historyList::-webkit-scrollbar {
-    width: 6px;
+.main-btn:active {
+    transform: translateY(0);
 }
 
-#historyList::-webkit-scrollbar-thumb {
-    background: #c5c9df;
-    border-radius: 10px;
+/* ================================
+   Switch Login/Register
+================================ */
+
+.switch-text {
+    margin-top: 24px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 13px;
 }
 
-/* =========================
-   DARK MODE
-========================= */
+.switch-text button {
+    border: none;
+    background: transparent;
 
-body.dark-mode {
-    background: linear-gradient(135deg, #111827, #312e81);
+    color: var(--accent-light);
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    margin-left: 4px;
 }
 
-body.dark-mode .calculator-section,
-body.dark-mode .history-section {
-    background: rgba(25, 29, 45, 0.97);
-    color: white;
+.switch-text button:hover {
+    text-decoration: underline;
 }
 
-body.dark-mode .top-bar h1,
-body.dark-mode .history-header h2 {
-    color: white;
+/* ================================
+   Error Message
+================================ */
+
+.error-message {
+    min-height: 18px;
+
+    margin: 2px 0 10px;
+
+    color: var(--danger);
+
+    font-size: 12px;
 }
 
-body.dark-mode .top-bar p {
-    color: #aeb5d0;
+/* ================================
+   Footer
+================================ */
+
+footer {
+    margin-top: auto;
+
+    padding: 24px 15px 30px;
+
+    text-align: center;
+
+    color: #777e8c;
+
+    font-size: 13px;
 }
 
-body.dark-mode .calculator {
-    background: #161a2b;
+footer span {
+    margin-right: 5px;
 }
 
-body.dark-mode .buttons button {
-    background: #282d43;
-    color: white;
+footer small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #565c68;
+
+    font-size: 11px;
 }
 
-body.dark-mode .buttons .special {
-    background: #34395a;
-    color: #aeb5ff;
-}
+/* ================================
+   Mobile Responsive
+================================ */
 
-body.dark-mode .buttons .operator {
-    background: #3c4070;
-    color: #c4c7ff;
-}
+@media (max-width: 600px) {
 
-body.dark-mode .history-item {
-    background: #282d43;
-}
-
-body.dark-mode .history-expression {
-    color: #aeb5d0;
-}
-
-body.dark-mode .history-result {
-    color: white;
-}
-
-body.dark-mode .empty-history {
-    color: #8f96b0;
-}
-
-body.dark-mode .theme-btn {
-    background: #34395a;
-}
-
-/* =========================
-   MOBILE RESPONSIVE
-========================= */
-
-@media (max-width: 800px) {
-
-    body {
-        padding: 15px;
+    .logo {
+        padding: 24px 0;
     }
 
-    .app-container {
-        grid-template-columns: 1fr;
-        max-width: 550px;
+    .auth-container {
+        padding: 20px 15px;
     }
 
-    .calculator-section,
-    .history-section {
-        padding: 20px;
-        border-radius: 22px;
+    .auth-card {
+        padding: 28px 22px;
+        border-radius: 20px;
     }
-}
 
-@media (max-width: 450px) {
-
-    .top-bar h1 {
+    .card-header h1 {
         font-size: 26px;
     }
 
-    .calculator {
-        padding: 14px;
-    }
-
-    #display {
-        height: 75px;
-        font-size: 28px;
-    }
-
-    .buttons {
-        gap: 8px;
-    }
-
-    .buttons button {
-        height: 55px;
-        border-radius: 13px;
-        font-size: 18px;
-    }
 }
