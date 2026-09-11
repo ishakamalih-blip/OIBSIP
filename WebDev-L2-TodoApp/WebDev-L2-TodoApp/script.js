@@ -1,783 +1,691 @@
 /* =====================================================
-   TASKFLOW - SMART TASK MANAGER
+   TASKFLOW — COMPLETE JAVASCRIPT
 ===================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    /* =========================
-       ELEMENTS
-    ========================= */
+/* =====================================================
+   STORAGE
+===================================================== */
 
-    const taskInput = document.getElementById("taskInput");
-    const priority = document.getElementById("priority");
-    const category = document.getElementById("category");
-    const dueDate = document.getElementById("dueDate");
-    const taskNotes = document.getElementById("taskNotes");
+let tasks = JSON.parse(localStorage.getItem("taskflowTasks")) || [];
 
-    const addTaskBtn = document.getElementById("addTaskBtn");
-
-    const taskList = document.getElementById("taskList");
-    const emptyState = document.getElementById("emptyState");
-
-    const searchInput = document.getElementById("searchInput");
-
-    const filterButtons =
-        document.querySelectorAll(".filter-btn");
-
-    const totalTasks =
-        document.getElementById("totalTasks");
-
-    const pendingTasks =
-        document.getElementById("pendingTasks");
-
-    const completedTasks =
-        document.getElementById("completedTasks");
-
-    const progressPercent =
-        document.getElementById("progressPercent");
-
-    const progressText =
-        document.getElementById("progressText");
-
-    const progressBar =
-        document.getElementById("progressBar");
-
-    const themeToggle =
-        document.getElementById("themeToggle");
-
-    /* SMART DASHBOARD */
-
-    const todayTaskCount =
-        document.getElementById("todayTaskCount");
-
-    const upcomingTaskCount =
-        document.getElementById("upcomingTaskCount");
-
-    const overdueTaskCount =
-        document.getElementById("overdueTaskCount");
-
-    const highPriorityCount =
-        document.getElementById("highPriorityCount");
+let currentFilter = "all";
 
 
-    /* =========================
-       TASK DATA
-    ========================= */
+/* =====================================================
+   DOM ELEMENTS
+===================================================== */
 
-    let tasks =
-        JSON.parse(
-            localStorage.getItem("taskflowTasks")
-        ) || [];
+const taskInput = document.getElementById("taskInput");
+const priorityInput = document.getElementById("priority");
+const addTaskBtn = document.getElementById("addTaskBtn");
 
-    let currentFilter = "all";
+const taskList = document.getElementById("taskList");
+const emptyState = document.getElementById("emptyState");
 
+const searchInput = document.getElementById("searchInput");
 
-    /* =========================
-       SAVE TASKS
-    ========================= */
+const filterButtons =
+    document.querySelectorAll(".filter-btn");
 
-    function saveTasks() {
+const totalTasks =
+    document.getElementById("totalTasks");
 
-        localStorage.setItem(
-            "taskflowTasks",
-            JSON.stringify(tasks)
-        );
+const activeTasks =
+    document.getElementById("activeTasks");
 
-    }
+const completedTasks =
+    document.getElementById("completedTasks");
 
-
-    /* =========================
-       ADD TASK
-    ========================= */
-
-    function addTask() {
-
-        const title =
-            taskInput.value.trim();
-
-        if (title === "") {
-
-            alert("Please enter a task.");
-
-            taskInput.focus();
-
-            return;
-        }
+const themeToggle =
+    document.getElementById("themeToggle");
 
 
-        const newTask = {
+/* =====================================================
+   SAVE TASKS
+===================================================== */
 
-            id: Date.now(),
+function saveTasks() {
 
-            title: title,
+    localStorage.setItem(
+        "taskflowTasks",
+        JSON.stringify(tasks)
+    );
 
-            priority:
-                priority.value,
-
-            category:
-                category.value,
-
-            dueDate:
-                dueDate.value,
-
-            notes:
-                taskNotes.value.trim(),
-
-            completed: false,
-
-            createdAt:
-                new Date().toISOString()
-
-        };
+}
 
 
-        tasks.unshift(newTask);
+/* =====================================================
+   ADD TASK
+===================================================== */
 
-        saveTasks();
+function addTask() {
 
-        clearInputs();
+    const title = taskInput.value.trim();
 
-        renderTasks();
+    if (title === "") {
 
-    }
-
-
-    /* =========================
-       CLEAR INPUTS
-    ========================= */
-
-    function clearInputs() {
-
-        taskInput.value = "";
-
-        priority.value = "medium";
-
-        category.value = "College";
-
-        dueDate.value = "";
-
-        taskNotes.value = "";
+        alert("Please enter a task.");
 
         taskInput.focus();
 
+        return;
     }
 
 
-    /* =========================
-       GET TODAY
-    ========================= */
+    const task = {
 
-    function getToday() {
+        id: Date.now(),
 
-        const today =
-            new Date();
+        title: title,
 
-        const year =
-            today.getFullYear();
+        priority: priorityInput
+            ? priorityInput.value
+            : "medium",
 
-        const month =
-            String(
-                today.getMonth() + 1
-            ).padStart(2, "0");
+        completed: false,
 
-        const day =
-            String(
-                today.getDate()
-            ).padStart(2, "0");
+        createdAt: new Date().toISOString(),
 
-        return `${year}-${month}-${day}`;
+        dueDate: null
+
+    };
+
+
+    tasks.unshift(task);
+
+
+    saveTasks();
+
+    taskInput.value = "";
+
+    renderTasks();
+
+    updateDashboard();
+
+    taskInput.focus();
+
+}
+
+
+/* =====================================================
+   DELETE TASK
+===================================================== */
+
+function deleteTask(id) {
+
+    const confirmDelete =
+        confirm("Are you sure you want to delete this task?");
+
+    if (!confirmDelete) {
+        return;
+    }
+
+
+    tasks = tasks.filter(
+        task => task.id !== id
+    );
+
+
+    saveTasks();
+
+    renderTasks();
+
+    updateDashboard();
+
+}
+
+
+/* =====================================================
+   TOGGLE TASK
+===================================================== */
+
+function toggleTask(id) {
+
+    tasks = tasks.map(task => {
+
+        if (task.id === id) {
+
+            return {
+
+                ...task,
+
+                completed: !task.completed
+
+            };
+
+        }
+
+        return task;
+
+    });
+
+
+    saveTasks();
+
+    renderTasks();
+
+    updateDashboard();
+
+}
+
+
+/* =====================================================
+   EDIT TASK
+===================================================== */
+
+function editTask(id) {
+
+    const task =
+        tasks.find(task => task.id === id);
+
+
+    if (!task) {
+        return;
+    }
+
+
+    const newTitle =
+        prompt(
+            "Edit your task:",
+            task.title
+        );
+
+
+    if (
+        newTitle === null ||
+        newTitle.trim() === ""
+    ) {
+        return;
+    }
+
+
+    task.title = newTitle.trim();
+
+
+    saveTasks();
+
+    renderTasks();
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function getFilteredTasks() {
+
+    const searchText =
+        searchInput
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+            : "";
+
+
+    let filtered = [...tasks];
+
+
+    /* FILTER */
+
+    if (currentFilter === "active") {
+
+        filtered =
+            filtered.filter(
+                task => !task.completed
+            );
 
     }
 
 
-    /* =========================
-       SMART DASHBOARD
-    ========================= */
+    if (currentFilter === "completed") {
 
-    function updateSmartDashboard() {
-
-        const today =
-            getToday();
-
-
-        let todayCount = 0;
-
-        let upcomingCount = 0;
-
-        let overdueCount = 0;
-
-        let highCount = 0;
-
-
-        tasks.forEach(task => {
-
-            /* Ignore completed tasks
-               for pending dashboard
-               calculations */
-
-            if (!task.completed) {
-
-
-                /* TODAY */
-
-                if (
-                    task.dueDate === today
-                ) {
-
-                    todayCount++;
-
-                }
-
-
-                /* UPCOMING */
-
-                if (
-                    task.dueDate &&
-                    task.dueDate > today
-                ) {
-
-                    upcomingCount++;
-
-                }
-
-
-                /* OVERDUE */
-
-                if (
-                    task.dueDate &&
-                    task.dueDate < today
-                ) {
-
-                    overdueCount++;
-
-                }
-
-
-                /* HIGH PRIORITY */
-
-                if (
-                    task.priority === "high"
-                ) {
-
-                    highCount++;
-
-                }
-
-            }
-
-        });
-
-
-        if (todayTaskCount) {
-
-            todayTaskCount.textContent =
-                todayCount;
-
-        }
-
-
-        if (upcomingTaskCount) {
-
-            upcomingTaskCount.textContent =
-                upcomingCount;
-
-        }
-
-
-        if (overdueTaskCount) {
-
-            overdueTaskCount.textContent =
-                overdueCount;
-
-        }
-
-
-        if (highPriorityCount) {
-
-            highPriorityCount.textContent =
-                highCount;
-
-        }
+        filtered =
+            filtered.filter(
+                task => task.completed
+            );
 
     }
 
 
-    /* =========================
-       RENDER TASKS
-    ========================= */
+    /* SEARCH */
 
-    function renderTasks() {
+    if (searchText !== "") {
 
-        taskList.innerHTML = "";
-
-
-        let filteredTasks =
-            [...tasks];
-
-
-        /* FILTER */
-
-        if (
-            currentFilter === "active"
-        ) {
-
-            filteredTasks =
-                filteredTasks.filter(
-                    task => !task.completed
-                );
-
-        }
-
-
-        if (
-            currentFilter === "completed"
-        ) {
-
-            filteredTasks =
-                filteredTasks.filter(
-                    task => task.completed
-                );
-
-        }
-
-
-        /* SEARCH */
-
-        const searchTerm =
-            searchInput
-                ? searchInput.value
+        filtered =
+            filtered.filter(task =>
+                task.title
                     .toLowerCase()
-                    .trim()
-                : "";
+                    .includes(searchText)
+            );
+
+    }
 
 
-        if (searchTerm !== "") {
+    return filtered;
 
-            filteredTasks =
-                filteredTasks.filter(task => {
+}
 
-                    return (
 
-                        task.title
-                            .toLowerCase()
-                            .includes(searchTerm)
+/* =====================================================
+   RENDER TASKS
+===================================================== */
 
-                        ||
+function renderTasks() {
 
-                        (task.category || "")
-                            .toLowerCase()
-                            .includes(searchTerm)
+    if (!taskList) {
+        return;
+    }
 
-                        ||
 
-                        (task.notes || "")
-                            .toLowerCase()
-                            .includes(searchTerm)
+    const filteredTasks =
+        getFilteredTasks();
 
-                    );
 
-                });
+    taskList.innerHTML = "";
+
+
+    if (filteredTasks.length === 0) {
+
+        if (emptyState) {
+
+            emptyState.style.display = "block";
+
+            const heading =
+                emptyState.querySelector("h3");
+
+            const paragraph =
+                emptyState.querySelector("p");
+
+
+            if (searchInput && searchInput.value.trim()) {
+
+                if (heading) {
+                    heading.textContent =
+                        "No tasks found";
+                }
+
+                if (paragraph) {
+                    paragraph.textContent =
+                        "Try searching with another keyword.";
+                }
+
+            } else if (currentFilter === "completed") {
+
+                if (heading) {
+                    heading.textContent =
+                        "No completed tasks";
+                }
+
+                if (paragraph) {
+                    paragraph.textContent =
+                        "Complete a task and it will appear here.";
+                }
+
+            } else if (currentFilter === "active") {
+
+                if (heading) {
+                    heading.textContent =
+                        "No active tasks";
+                }
+
+                if (paragraph) {
+                    paragraph.textContent =
+                        "Great! You have no pending tasks.";
+                }
+
+            } else {
+
+                if (heading) {
+                    heading.textContent =
+                        "Your day is clear!";
+                }
+
+                if (paragraph) {
+                    paragraph.textContent =
+                        "Add a task and start making progress.";
+                }
+
+            }
+
+        }
+
+        return;
+
+    }
+
+
+    if (emptyState) {
+
+        emptyState.style.display = "none";
+
+    }
+
+
+    filteredTasks.forEach(task => {
+
+        const taskItem =
+            document.createElement("div");
+
+
+        taskItem.className =
+            "task-item";
+
+
+        if (task.completed) {
+
+            taskItem.classList.add(
+                "completed"
+            );
 
         }
 
 
-        /* EMPTY STATE */
+        taskItem.innerHTML = `
 
-        if (
-            filteredTasks.length === 0
-        ) {
+            <div class="task-content">
 
-            emptyState.style.display =
-                "block";
+                <input
+                    type="checkbox"
+                    class="task-checkbox"
+                    ${task.completed ? "checked" : ""}
+                    onchange="toggleTask(${task.id})"
+                >
 
-        } else {
+                <div class="task-info">
 
-            emptyState.style.display =
-                "none";
+                    <div class="task-title">
+                        ${escapeHTML(task.title)}
+                    </div>
 
-        }
+                    <div class="task-meta">
 
+                        <span>
+                            ${getTaskStatus(task)}
+                        </span>
 
-        /* CREATE TASK CARDS */
-
-        filteredTasks.forEach(task => {
-
-            const taskItem =
-                document.createElement("div");
-
-            taskItem.className =
-                "task-item";
-
-
-            if (task.completed) {
-
-                taskItem.classList.add(
-                    "completed"
-                );
-
-            }
-
-
-            /* OVERDUE CLASS */
-
-            const today =
-                getToday();
-
-            if (
-                !task.completed &&
-                task.dueDate &&
-                task.dueDate < today
-            ) {
-
-                taskItem.classList.add(
-                    "overdue"
-                );
-
-            }
-
-
-            const priorityName =
-                task.priority || "medium";
-
-            const categoryName =
-                task.category || "Other";
-
-
-            taskItem.innerHTML = `
-
-                <div class="task-content">
-
-                    <input
-                        type="checkbox"
-                        class="task-checkbox"
-                        ${task.completed ? "checked" : ""}
-                        data-id="${task.id}"
-                    >
-
-                    <div class="task-info">
-
-                        <div class="task-title">
-
-                            ${escapeHTML(task.title)}
-
-                        </div>
-
-
-                        <div class="task-meta">
-
-                            <span>
-                                ${escapeHTML(categoryName)}
-                            </span>
-
-                            ${
-                                task.dueDate
-                                ? `
-                                    <span>
-                                        📅 ${formatDate(task.dueDate)}
-                                    </span>
-                                  `
-                                : ""
-                            }
-
-                            ${
-                                task.notes
-                                ? `
-                                    <span>
-                                        📝 ${escapeHTML(task.notes)}
-                                    </span>
-                                  `
-                                : ""
-                            }
-
-                        </div>
+                        <span>
+                            ${formatDate(task.createdAt)}
+                        </span>
 
                     </div>
 
                 </div>
 
-
-                <div class="task-actions">
-
-                    <span
-                        class="priority-badge ${priorityName}"
-                    >
-                        ${priorityName.toUpperCase()}
-                    </span>
+            </div>
 
 
-                    <button
-                        class="edit-btn"
-                        data-id="${task.id}"
-                        title="Edit Task"
-                    >
-                        ✏️
-                    </button>
+            <div class="task-actions">
+
+                <span class="priority-badge ${task.priority}">
+                    ${task.priority}
+                </span>
+
+                <button
+                    class="edit-btn"
+                    onclick="editTask(${task.id})"
+                    title="Edit Task"
+                >
+                    ✏️
+                </button>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteTask(${task.id})"
+                    title="Delete Task"
+                >
+                    🗑️
+                </button>
+
+            </div>
+
+        `;
 
 
-                    <button
-                        class="delete-btn"
-                        data-id="${task.id}"
-                        title="Delete Task"
-                    >
-                        🗑️
-                    </button>
+        taskList.appendChild(taskItem);
 
-                </div>
+    });
 
-            `;
+}
 
 
-            taskList.appendChild(taskItem);
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
 
-        });
+function escapeHTML(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
 
 
-        updateStatistics();
+/* =====================================================
+   TASK STATUS
+===================================================== */
 
-        updateSmartDashboard();
+function getTaskStatus(task) {
+
+    if (task.completed) {
+
+        return "✓ Completed";
+
+    }
+
+    return "○ Pending";
+
+}
+
+
+/* =====================================================
+   FORMAT DATE
+===================================================== */
+
+function formatDate(dateString) {
+
+    const date =
+        new Date(dateString);
+
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =====================================================
+   DASHBOARD STATISTICS
+===================================================== */
+
+function updateDashboard() {
+
+    const total =
+        tasks.length;
+
+
+    const completed =
+        tasks.filter(
+            task => task.completed
+        ).length;
+
+
+    const active =
+        total - completed;
+
+
+    if (totalTasks) {
+
+        totalTasks.textContent =
+            total;
 
     }
 
 
-    /* =========================
-       STATISTICS
-    ========================= */
+    if (activeTasks) {
 
-    function updateStatistics() {
-
-        const total =
-            tasks.length;
-
-
-        const completed =
-            tasks.filter(
-                task => task.completed
-            ).length;
-
-
-        const pending =
-            total - completed;
-
-
-        const progress =
-            total > 0
-                ? Math.round(
-                    (completed / total) * 100
-                )
-                : 0;
-
-
-        if (totalTasks) {
-
-            totalTasks.textContent =
-                total;
-
-        }
-
-
-        if (pendingTasks) {
-
-            pendingTasks.textContent =
-                pending;
-
-        }
-
-
-        if (completedTasks) {
-
-            completedTasks.textContent =
-                completed;
-
-        }
-
-
-        if (progressPercent) {
-
-            progressPercent.textContent =
-                `${progress}%`;
-
-        }
-
-
-        if (progressText) {
-
-            progressText.textContent =
-                `${progress}%`;
-
-        }
-
-
-        if (progressBar) {
-
-            progressBar.style.width =
-                `${progress}%`;
-
-        }
+        activeTasks.textContent =
+            active;
 
     }
 
 
-    /* =========================
-       COMPLETE TASK
-    ========================= */
+    if (completedTasks) {
 
-    taskList.addEventListener(
-        "change",
-        event => {
+        completedTasks.textContent =
+            completed;
 
-            if (
-                event.target.classList.contains(
-                    "task-checkbox"
-                )
-            ) {
-
-                const id =
-                    Number(
-                        event.target.dataset.id
-                    );
+    }
 
 
-                const task =
-                    tasks.find(
-                        item => item.id === id
-                    );
+    updateProgress();
+
+}
 
 
-                if (task) {
+/* =====================================================
+   PROGRESS
+===================================================== */
 
-                    task.completed =
-                        event.target.checked;
+function updateProgress() {
 
-                    saveTasks();
-
-                    renderTasks();
-
-                }
-
-            }
-
-        }
-    );
+    const total =
+        tasks.length;
 
 
-    /* =========================
-       EDIT / DELETE
-    ========================= */
-
-    taskList.addEventListener(
-        "click",
-        event => {
+    const completed =
+        tasks.filter(
+            task => task.completed
+        ).length;
 
 
-            /* DELETE */
-
-            if (
-                event.target.classList.contains(
-                    "delete-btn"
-                )
-            ) {
-
-                const id =
-                    Number(
-                        event.target.dataset.id
-                    );
+    let percentage = 0;
 
 
-                if (
-                    !confirm(
-                        "Are you sure you want to delete this task?"
-                    )
-                ) {
+    if (total > 0) {
 
-                    return;
+        percentage =
+            Math.round(
+                (completed / total) * 100
+            );
 
-                }
-
-
-                tasks =
-                    tasks.filter(
-                        task => task.id !== id
-                    );
+    }
 
 
-                saveTasks();
-
-                renderTasks();
-
-            }
-
-
-            /* EDIT */
-
-            if (
-                event.target.classList.contains(
-                    "edit-btn"
-                )
-            ) {
-
-                const id =
-                    Number(
-                        event.target.dataset.id
-                    );
-
-
-                const task =
-                    tasks.find(
-                        item => item.id === id
-                    );
-
-
-                if (!task) {
-
-                    return;
-
-                }
-
-
-                const updatedTitle =
-                    prompt(
-                        "Edit task:",
-                        task.title
-                    );
-
-
-                if (
-                    updatedTitle !== null &&
-                    updatedTitle.trim() !== ""
-                ) {
-
-                    task.title =
-                        updatedTitle.trim();
-
-                    saveTasks();
-
-                    renderTasks();
-
-                }
-
-            }
-
-        }
-    );
-
-
-    /* =========================
-       ADD BUTTON
-    ========================= */
-
-    if (addTaskBtn) {
-
-        addTaskBtn.addEventListener(
-            "click",
-            addTask
+    const progressBar =
+        document.querySelector(
+            ".progress-bar"
         );
 
+
+    const progressText =
+        document.querySelector(
+            ".progress-header strong"
+        );
+
+
+    if (progressBar) {
+
+        progressBar.style.width =
+            percentage + "%";
+
     }
 
 
-    /* =========================
-       ENTER KEY
-    ========================= */
+    if (progressText) {
+
+        progressText.textContent =
+            percentage + "%";
+
+    }
+
+}
+
+
+/* =====================================================
+   FILTER BUTTONS
+===================================================== */
+
+filterButtons.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            filterButtons.forEach(btn => {
+
+                btn.classList.remove(
+                    "active"
+                );
+
+            });
+
+
+            button.classList.add(
+                "active"
+            );
+
+
+            currentFilter =
+                button.dataset.filter;
+
+
+            renderTasks();
+
+        }
+    );
+
+});
+
+
+/* =====================================================
+   SEARCH EVENT
+===================================================== */
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        () => {
+
+            renderTasks();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ADD TASK BUTTON
+===================================================== */
+
+if (addTaskBtn) {
+
+    addTaskBtn.addEventListener(
+        "click",
+        addTask
+    );
+
+}
+
+
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+if (taskInput) {
 
     taskInput.addEventListener(
         "keydown",
@@ -792,169 +700,93 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     );
 
-
-    /* =========================
-       SEARCH
-    ========================= */
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            renderTasks
-        );
-
-    }
+}
 
 
-    /* =========================
-       FILTERS
-    ========================= */
+/* =====================================================
+   DARK / LIGHT THEME
+===================================================== */
 
-    filterButtons.forEach(button => {
+if (themeToggle) {
 
-        button.addEventListener(
-            "click",
-            () => {
+    themeToggle.addEventListener(
+        "click",
+        () => {
 
-                filterButtons.forEach(btn => {
-
-                    btn.classList.remove(
-                        "active"
-                    );
-
-                });
+            document.body.classList.toggle(
+                "light-theme"
+            );
 
 
-                button.classList.add(
-                    "active"
+            const isLight =
+                document.body.classList.contains(
+                    "light-theme"
                 );
 
 
-                currentFilter =
-                    button.dataset.filter;
+            themeToggle.textContent =
+                isLight ? "☀" : "☾";
 
 
-                renderTasks();
+            localStorage.setItem(
+                "taskflowTheme",
+                isLight
+                    ? "light"
+                    : "dark"
+            );
 
-            }
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD SAVED THEME
+===================================================== */
+
+function loadTheme() {
+
+    const savedTheme =
+        localStorage.getItem(
+            "taskflowTheme"
         );
 
-    });
+
+    if (savedTheme === "light") {
+
+        document.body.classList.add(
+            "light-theme"
+        );
 
 
-    /* =========================
-       THEME
-    ========================= */
-
-    if (themeToggle) {
-
-        const savedTheme =
-            localStorage.getItem(
-                "taskflowTheme"
-            );
-
-
-        if (
-            savedTheme === "light"
-        ) {
-
-            document.body.classList.add(
-                "light-theme"
-            );
+        if (themeToggle) {
 
             themeToggle.textContent =
                 "☀";
 
         }
 
-
-        themeToggle.addEventListener(
-            "click",
-            () => {
-
-                document.body.classList.toggle(
-                    "light-theme"
-                );
-
-
-                const isLight =
-                    document.body.classList.contains(
-                        "light-theme"
-                    );
-
-
-                themeToggle.textContent =
-                    isLight
-                        ? "☀"
-                        : "☾";
-
-
-                localStorage.setItem(
-                    "taskflowTheme",
-                    isLight
-                        ? "light"
-                        : "dark"
-                );
-
-            }
-        );
-
     }
 
-
-    /* =========================
-       DATE FORMAT
-    ========================= */
-
-    function formatDate(dateString) {
-
-        if (!dateString) {
-
-            return "";
-
-        }
+}
 
 
-        const date =
-            new Date(
-                dateString + "T00:00:00"
-            );
+/* =====================================================
+   INITIALIZE APP
+===================================================== */
+
+loadTheme();
+
+renderTasks();
+
+updateDashboard();
 
 
-        return date.toLocaleDateString(
-            "en-IN",
-            {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-            }
-        );
+/* =====================================================
+   CONSOLE MESSAGE
+===================================================== */
 
-    }
-
-
-    /* =========================
-       HTML SECURITY
-    ========================= */
-
-    function escapeHTML(text) {
-
-        const div =
-            document.createElement("div");
-
-        div.textContent =
-            text || "";
-
-        return div.innerHTML;
-
-    }
-
-
-    /* =========================
-       INITIAL LOAD
-    ========================= */
-
-    renderTasks();
-
-});
+console.log(
+    "TaskFlow loaded successfully 🚀"
+);
