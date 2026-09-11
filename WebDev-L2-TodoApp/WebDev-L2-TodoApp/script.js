@@ -1,12 +1,12 @@
 /* =====================================================
-   TASKFLOW — COMPLETE JAVASCRIPT
+   TASKFLOW - SMART TASK MANAGER
 ===================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* =================================================
+    /* =========================
        ELEMENTS
-    ================================================= */
+    ========================= */
 
     const taskInput = document.getElementById("taskInput");
     const priority = document.getElementById("priority");
@@ -45,20 +45,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggle =
         document.getElementById("themeToggle");
 
+    /* SMART DASHBOARD */
 
-    /* =================================================
-       DATA
-    ================================================= */
+    const todayTaskCount =
+        document.getElementById("todayTaskCount");
+
+    const upcomingTaskCount =
+        document.getElementById("upcomingTaskCount");
+
+    const overdueTaskCount =
+        document.getElementById("overdueTaskCount");
+
+    const highPriorityCount =
+        document.getElementById("highPriorityCount");
+
+
+    /* =========================
+       TASK DATA
+    ========================= */
 
     let tasks =
-        JSON.parse(localStorage.getItem("taskflowTasks")) || [];
+        JSON.parse(
+            localStorage.getItem("taskflowTasks")
+        ) || [];
 
     let currentFilter = "all";
 
 
-    /* =================================================
+    /* =========================
        SAVE TASKS
-    ================================================= */
+    ========================= */
 
     function saveTasks() {
 
@@ -70,9 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
+    /* =========================
        ADD TASK
-    ================================================= */
+    ========================= */
 
     function addTask() {
 
@@ -107,11 +123,10 @@ document.addEventListener("DOMContentLoaded", () => {
             notes:
                 taskNotes.value.trim(),
 
-            completed:
-                false,
+            completed: false,
 
             createdAt:
-                new Date().toLocaleDateString()
+                new Date().toISOString()
 
         };
 
@@ -127,9 +142,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
+    /* =========================
        CLEAR INPUTS
-    ================================================= */
+    ========================= */
 
     function clearInputs() {
 
@@ -148,9 +163,148 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
+    /* =========================
+       GET TODAY
+    ========================= */
+
+    function getToday() {
+
+        const today =
+            new Date();
+
+        const year =
+            today.getFullYear();
+
+        const month =
+            String(
+                today.getMonth() + 1
+            ).padStart(2, "0");
+
+        const day =
+            String(
+                today.getDate()
+            ).padStart(2, "0");
+
+        return `${year}-${month}-${day}`;
+
+    }
+
+
+    /* =========================
+       SMART DASHBOARD
+    ========================= */
+
+    function updateSmartDashboard() {
+
+        const today =
+            getToday();
+
+
+        let todayCount = 0;
+
+        let upcomingCount = 0;
+
+        let overdueCount = 0;
+
+        let highCount = 0;
+
+
+        tasks.forEach(task => {
+
+            /* Ignore completed tasks
+               for pending dashboard
+               calculations */
+
+            if (!task.completed) {
+
+
+                /* TODAY */
+
+                if (
+                    task.dueDate === today
+                ) {
+
+                    todayCount++;
+
+                }
+
+
+                /* UPCOMING */
+
+                if (
+                    task.dueDate &&
+                    task.dueDate > today
+                ) {
+
+                    upcomingCount++;
+
+                }
+
+
+                /* OVERDUE */
+
+                if (
+                    task.dueDate &&
+                    task.dueDate < today
+                ) {
+
+                    overdueCount++;
+
+                }
+
+
+                /* HIGH PRIORITY */
+
+                if (
+                    task.priority === "high"
+                ) {
+
+                    highCount++;
+
+                }
+
+            }
+
+        });
+
+
+        if (todayTaskCount) {
+
+            todayTaskCount.textContent =
+                todayCount;
+
+        }
+
+
+        if (upcomingTaskCount) {
+
+            upcomingTaskCount.textContent =
+                upcomingCount;
+
+        }
+
+
+        if (overdueTaskCount) {
+
+            overdueTaskCount.textContent =
+                overdueCount;
+
+        }
+
+
+        if (highPriorityCount) {
+
+            highPriorityCount.textContent =
+                highCount;
+
+        }
+
+    }
+
+
+    /* =========================
        RENDER TASKS
-    ================================================= */
+    ========================= */
 
     function renderTasks() {
 
@@ -163,7 +317,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         /* FILTER */
 
-        if (currentFilter === "active") {
+        if (
+            currentFilter === "active"
+        ) {
 
             filteredTasks =
                 filteredTasks.filter(
@@ -173,7 +329,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        if (currentFilter === "completed") {
+        if (
+            currentFilter === "completed"
+        ) {
 
             filteredTasks =
                 filteredTasks.filter(
@@ -196,38 +354,46 @@ document.addEventListener("DOMContentLoaded", () => {
         if (searchTerm !== "") {
 
             filteredTasks =
-                filteredTasks.filter(task =>
+                filteredTasks.filter(task => {
 
-                    task.title
-                        .toLowerCase()
-                        .includes(searchTerm)
+                    return (
 
-                    ||
+                        task.title
+                            .toLowerCase()
+                            .includes(searchTerm)
 
-                    task.category
-                        .toLowerCase()
-                        .includes(searchTerm)
+                        ||
 
-                    ||
+                        (task.category || "")
+                            .toLowerCase()
+                            .includes(searchTerm)
 
-                    task.notes
-                        .toLowerCase()
-                        .includes(searchTerm)
+                        ||
 
-                );
+                        (task.notes || "")
+                            .toLowerCase()
+                            .includes(searchTerm)
+
+                    );
+
+                });
 
         }
 
 
         /* EMPTY STATE */
 
-        if (filteredTasks.length === 0) {
+        if (
+            filteredTasks.length === 0
+        ) {
 
-            emptyState.style.display = "block";
+            emptyState.style.display =
+                "block";
 
         } else {
 
-            emptyState.style.display = "none";
+            emptyState.style.display =
+                "none";
 
         }
 
@@ -245,14 +411,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (task.completed) {
 
-                taskItem.classList.add("completed");
+                taskItem.classList.add(
+                    "completed"
+                );
+
+            }
+
+
+            /* OVERDUE CLASS */
+
+            const today =
+                getToday();
+
+            if (
+                !task.completed &&
+                task.dueDate &&
+                task.dueDate < today
+            ) {
+
+                taskItem.classList.add(
+                    "overdue"
+                );
 
             }
 
 
             const priorityName =
                 task.priority || "medium";
-
 
             const categoryName =
                 task.category || "Other";
@@ -272,22 +457,35 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="task-info">
 
                         <div class="task-title">
+
                             ${escapeHTML(task.title)}
+
                         </div>
+
 
                         <div class="task-meta">
 
-                            ${escapeHTML(categoryName)}
+                            <span>
+                                ${escapeHTML(categoryName)}
+                            </span>
 
                             ${
                                 task.dueDate
-                                ? ` • Due: ${formatDate(task.dueDate)}`
+                                ? `
+                                    <span>
+                                        📅 ${formatDate(task.dueDate)}
+                                    </span>
+                                  `
                                 : ""
                             }
 
                             ${
                                 task.notes
-                                ? ` • ${escapeHTML(task.notes)}`
+                                ? `
+                                    <span>
+                                        📝 ${escapeHTML(task.notes)}
+                                    </span>
+                                  `
                                 : ""
                             }
 
@@ -303,7 +501,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span
                         class="priority-badge ${priorityName}"
                     >
-                        ${priorityName}
+                        ${priorityName.toUpperCase()}
                     </span>
 
 
@@ -336,12 +534,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateStatistics();
 
+        updateSmartDashboard();
+
     }
 
 
-    /* =================================================
-       UPDATE STATISTICS
-    ================================================= */
+    /* =========================
+       STATISTICS
+    ========================= */
 
     function updateStatistics() {
 
@@ -359,17 +559,12 @@ document.addEventListener("DOMContentLoaded", () => {
             total - completed;
 
 
-        let progress = 0;
-
-
-        if (total > 0) {
-
-            progress =
-                Math.round(
+        const progress =
+            total > 0
+                ? Math.round(
                     (completed / total) * 100
-                );
-
-        }
+                )
+                : 0;
 
 
         if (totalTasks) {
@@ -422,9 +617,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
+    /* =========================
        COMPLETE TASK
-    ================================================= */
+    ========================= */
 
     taskList.addEventListener(
         "change",
@@ -465,13 +660,14 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /* =================================================
+    /* =========================
        EDIT / DELETE
-    ================================================= */
+    ========================= */
 
     taskList.addEventListener(
         "click",
         event => {
+
 
             /* DELETE */
 
@@ -487,13 +683,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-                const confirmDelete =
-                    confirm(
+                if (
+                    !confirm(
                         "Are you sure you want to delete this task?"
-                    );
-
-
-                if (!confirmDelete) {
+                    )
+                ) {
 
                     return;
 
@@ -548,8 +742,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 if (
-                    updatedTitle !== null
-                    &&
+                    updatedTitle !== null &&
                     updatedTitle.trim() !== ""
                 ) {
 
@@ -568,9 +761,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /* =================================================
+    /* =========================
        ADD BUTTON
-    ================================================= */
+    ========================= */
 
     if (addTaskBtn) {
 
@@ -582,9 +775,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
+    /* =========================
        ENTER KEY
-    ================================================= */
+    ========================= */
 
     taskInput.addEventListener(
         "keydown",
@@ -600,9 +793,9 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    /* =================================================
+    /* =========================
        SEARCH
-    ================================================= */
+    ========================= */
 
     if (searchInput) {
 
@@ -614,9 +807,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
-       FILTER BUTTONS
-    ================================================= */
+    /* =========================
+       FILTERS
+    ========================= */
 
     filterButtons.forEach(button => {
 
@@ -650,9 +843,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /* =================================================
-       THEME TOGGLE
-    ================================================= */
+    /* =========================
+       THEME
+    ========================= */
 
     if (themeToggle) {
 
@@ -662,13 +855,16 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-        if (savedTheme === "light") {
+        if (
+            savedTheme === "light"
+        ) {
 
             document.body.classList.add(
                 "light-theme"
             );
 
-            themeToggle.textContent = "☀";
+            themeToggle.textContent =
+                "☀";
 
         }
 
@@ -689,14 +885,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                 themeToggle.textContent =
-                    isLight ? "☀" : "☾";
+                    isLight
+                        ? "☀"
+                        : "☾";
 
 
                 localStorage.setItem(
                     "taskflowTheme",
                     isLight
-                    ? "light"
-                    : "dark"
+                        ? "light"
+                        : "dark"
                 );
 
             }
@@ -705,9 +903,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
+    /* =========================
        DATE FORMAT
-    ================================================= */
+    ========================= */
 
     function formatDate(dateString) {
 
@@ -736,10 +934,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
-       SECURITY
-       Prevent HTML injection in task text
-    ================================================= */
+    /* =========================
+       HTML SECURITY
+    ========================= */
 
     function escapeHTML(text) {
 
@@ -754,9 +951,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    /* =================================================
+    /* =========================
        INITIAL LOAD
-    ================================================= */
+    ========================= */
 
     renderTasks();
 
