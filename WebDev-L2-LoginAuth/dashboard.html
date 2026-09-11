@@ -3,133 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureVault | Dashboard</title>
+
+    <title>authFlow | Dashboard</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="dashboard-page">
+    <!-- Background -->
+    <div class="background-glow"></div>
 
-        <nav class="dashboard-nav">
+    <!-- Navbar -->
+    <header class="dashboard-nav">
 
-            <div class="dashboard-logo">
-                🔐 Secure<span>Vault</span>
+        <div class="logo">
+            <div class="logo-box">aF</div>
+            <span>authFlow</span>
+        </div>
+
+        <button id="logoutBtn" class="logout-btn">
+            Logout
+        </button>
+
+    </header>
+
+
+    <!-- Dashboard -->
+    <main class="dashboard-container">
+
+        <section class="welcome-card">
+
+            <div class="welcome-icon">
+                ✓
             </div>
 
-            <button id="logoutBtn">
-                Logout ↪
-            </button>
+            <p class="dashboard-label">
+                SECURE DASHBOARD
+            </p>
 
-        </nav>
+            <h1>
+                Welcome, <span id="username">User</span> 👋
+            </h1>
 
-        <main class="dashboard-content">
+            <p class="dashboard-description">
+                You have successfully logged in to your secure account.
+            </p>
 
-            <section class="welcome-card">
+        </section>
 
-                <div class="dashboard-icon">
-                    🛡️
+
+        <!-- User Information -->
+        <section class="info-grid">
+
+            <div class="info-card">
+                <span class="info-icon">👤</span>
+
+                <div>
+                    <small>USERNAME</small>
+                    <h3 id="userUsername">-</h3>
                 </div>
-
-                <p class="dashboard-label">
-                    AUTHENTICATION SUCCESSFUL
-                </p>
-
-                <h1>
-                    Welcome, <span id="userName">User</span> 👋
-                </h1>
-
-                <p class="dashboard-description">
-                    You have successfully logged into your
-                    protected SecureVault dashboard.
-                </p>
-
-            </section>
-
-
-            <section class="dashboard-grid">
-
-                <div class="info-card">
-                    <span>👤</span>
-
-                    <div>
-                        <small>USERNAME</small>
-                        <strong id="dashboardUsername">
-                            ---
-                        </strong>
-                    </div>
-                </div>
-
-
-                <div class="info-card">
-                    <span>✉️</span>
-
-                    <div>
-                        <small>EMAIL</small>
-                        <strong id="dashboardEmail">
-                            ---
-                        </strong>
-                    </div>
-                </div>
-
-
-                <div class="info-card">
-                    <span>🔒</span>
-
-                    <div>
-                        <small>SECURITY</small>
-                        <strong>
-                            Protected ✓
-                        </strong>
-                    </div>
-                </div>
-
-            </section>
-
-
-            <div class="dashboard-footer">
-                🟢 Your session is active and secure.
             </div>
 
-        </main>
 
-    </div>
+            <div class="info-card">
+                <span class="info-icon">✉️</span>
+
+                <div>
+                    <small>EMAIL</small>
+                    <h3 id="userEmail">-</h3>
+                </div>
+            </div>
 
 
+            <div class="info-card">
+                <span class="info-icon">🔐</span>
+
+                <div>
+                    <small>ACCOUNT STATUS</small>
+                    <h3>Authenticated</h3>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Security Card -->
+        <section class="security-card">
+
+            <div class="security-icon">
+                🛡️
+            </div>
+
+            <div>
+                <h2>Your account is protected</h2>
+
+                <p>
+                    Your authentication session is active.
+                    Logout when you are finished using this dashboard.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <span>🔒</span>
+        authFlow Authentication System
+        <small>Task 4 • OIBSIP Web Development Internship</small>
+    </footer>
+
+
+    <!-- Protected Session -->
     <script>
 
-        const session = JSON.parse(
-            sessionStorage.getItem("secureVaultSession")
-        );
+        // Check login session
+        const session =
+            JSON.parse(localStorage.getItem("authSession"));
 
-        // Protect dashboard
-        if (!session) {
+        // If user is NOT logged in,
+        // redirect them to login page.
+        if (!session || session.loggedIn !== true) {
 
             window.location.href = "index.html";
 
         } else {
 
-            document.getElementById("userName").textContent =
+            // Display user information
+
+            document.getElementById("username").textContent =
                 session.username;
 
-            document.getElementById("dashboardUsername").textContent =
+            document.getElementById("userUsername").textContent =
                 session.username;
 
-            document.getElementById("dashboardEmail").textContent =
+            document.getElementById("userEmail").textContent =
                 session.email;
         }
 
 
         // Logout
-        document.getElementById("logoutBtn")
-            .addEventListener("click", () => {
+        document
+            .getElementById("logoutBtn")
+            .addEventListener("click", function () {
 
-                sessionStorage.removeItem(
-                    "secureVaultSession"
-                );
+                // Remove active session
+                localStorage.removeItem("authSession");
 
+                // Redirect to login
                 window.location.href = "index.html";
-
             });
 
     </script>
