@@ -12,52 +12,49 @@
 <body>
 
     <div class="background">
-        <div class="circle circle-one"></div>
-        <div class="circle circle-two"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
     </div>
 
-    <main class="auth-container">
+    <main class="auth-wrapper">
 
-        <!-- Logo / Branding -->
+        <!-- Logo -->
         <div class="brand">
-            <div class="logo">🔐</div>
-            <h1>SecureVault</h1>
-            <p>Secure • Simple • Reliable</p>
+            <div class="brand-icon">🔐</div>
+            <span>Secure<span>Vault</span></span>
         </div>
 
         <!-- Authentication Card -->
         <div class="auth-card">
 
-            <!-- Tabs -->
-            <div class="tabs">
-                <button id="loginTab" class="tab active">
-                    Login
-                </button>
+            <div class="card-header">
+                <div class="shield">🛡️</div>
 
-                <button id="registerTab" class="tab">
-                    Register
-                </button>
+                <h1 id="formTitle">Welcome Back</h1>
+
+                <p id="formSubtitle">
+                    Login to access your secure dashboard.
+                </p>
             </div>
 
             <!-- Login Form -->
             <form id="loginForm">
-
-                <div class="form-header">
-                    <h2>Welcome Back 👋</h2>
-                    <p>Login to access your secure dashboard.</p>
-                </div>
 
                 <div class="input-group">
                     <label for="loginUsername">
                         Username or Email
                     </label>
 
-                    <input
-                        type="text"
-                        id="loginUsername"
-                        placeholder="Enter your username or email"
-                        autocomplete="username"
-                    >
+                    <div class="input-box">
+                        <span>👤</span>
+
+                        <input
+                            type="text"
+                            id="loginUsername"
+                            placeholder="Enter username or email"
+                            required
+                        >
+                    </div>
                 </div>
 
                 <div class="input-group">
@@ -65,52 +62,53 @@
                         Password
                     </label>
 
-                    <div class="password-box">
+                    <div class="input-box">
+                        <span>🔒</span>
+
                         <input
                             type="password"
                             id="loginPassword"
                             placeholder="Enter your password"
-                            autocomplete="current-password"
+                            required
                         >
 
                         <button
                             type="button"
-                            class="show-password"
-                            data-target="loginPassword"
+                            class="eye-btn"
+                            id="loginEye"
                         >
-                            👁
+                            👁️
                         </button>
                     </div>
                 </div>
 
-                <p id="loginMessage" class="message"></p>
+                <div id="loginMessage" class="message"></div>
 
                 <button type="submit" class="primary-btn">
-                    Login →
+                    Login
+                    <span>→</span>
                 </button>
 
             </form>
 
-
-            <!-- Registration Form -->
+            <!-- Register Form -->
             <form id="registerForm" class="hidden">
-
-                <div class="form-header">
-                    <h2>Create Account 🚀</h2>
-                    <p>Register to create your secure account.</p>
-                </div>
 
                 <div class="input-group">
                     <label for="registerUsername">
                         Username
                     </label>
 
-                    <input
-                        type="text"
-                        id="registerUsername"
-                        placeholder="Choose a username"
-                        autocomplete="username"
-                    >
+                    <div class="input-box">
+                        <span>👤</span>
+
+                        <input
+                            type="text"
+                            id="registerUsername"
+                            placeholder="Choose a username"
+                            required
+                        >
+                    </div>
                 </div>
 
                 <div class="input-group">
@@ -118,12 +116,16 @@
                         Email
                     </label>
 
-                    <input
-                        type="email"
-                        id="registerEmail"
-                        placeholder="Enter your email"
-                        autocomplete="email"
-                    >
+                    <div class="input-box">
+                        <span>✉️</span>
+
+                        <input
+                            type="email"
+                            id="registerEmail"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
                 </div>
 
                 <div class="input-group">
@@ -131,27 +133,28 @@
                         Password
                     </label>
 
-                    <div class="password-box">
+                    <div class="input-box">
+                        <span>🔒</span>
+
                         <input
                             type="password"
                             id="registerPassword"
                             placeholder="Minimum 8 characters"
-                            autocomplete="new-password"
+                            required
                         >
 
                         <button
                             type="button"
-                            class="show-password"
-                            data-target="registerPassword"
+                            class="eye-btn"
+                            id="registerEye"
                         >
-                            👁
+                            👁️
                         </button>
                     </div>
 
-                    <!-- Password Strength -->
-                    <div class="strength-container">
+                    <div class="strength">
                         <div class="strength-bar">
-                            <span id="strengthBar"></span>
+                            <div id="strengthFill"></div>
                         </div>
 
                         <small id="strengthText">
@@ -160,28 +163,60 @@
                     </div>
                 </div>
 
-                <p id="registerMessage" class="message"></p>
+                <div class="input-group">
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <div class="input-box">
+                        <span>🔐</span>
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            placeholder="Confirm your password"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div id="registerMessage" class="message"></div>
 
                 <button type="submit" class="primary-btn">
-                    Create Account →
+                    Create Account
+                    <span>→</span>
                 </button>
 
             </form>
 
+            <!-- Switch -->
+            <div class="switch-area">
+
+                <p id="switchText">
+                    Don't have an account?
+                </p>
+
+                <button id="switchBtn">
+                    Create Account
+                </button>
+
+            </div>
+
         </div>
 
         <!-- Security Badge -->
-        <div class="security-badge">
+        <div class="security-note">
             <span>🛡️</span>
+
             <div>
                 <strong>Secure Authentication</strong>
-                <small>Your account is protected</small>
+                <p>Your account is protected</p>
             </div>
         </div>
 
-        <p class="footer-text">
+        <footer>
             Task 4 • OIBSIP Web Development Internship
-        </p>
+        </footer>
 
     </main>
 
