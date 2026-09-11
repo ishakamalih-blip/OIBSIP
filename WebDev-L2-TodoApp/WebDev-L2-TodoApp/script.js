@@ -1,5 +1,6 @@
 /* =====================================================
-   TASKFLOW — COMPLETE JAVASCRIPT
+   TASKFLOW — SMART PRODUCTIVITY TODO APP
+   Complete script.js
 ===================================================== */
 
 
@@ -7,7 +8,8 @@
    STORAGE
 ===================================================== */
 
-let tasks = JSON.parse(localStorage.getItem("taskflowTasks")) || [];
+let tasks =
+    JSON.parse(localStorage.getItem("taskflowTasks")) || [];
 
 let currentFilter = "all";
 
@@ -16,29 +18,73 @@ let currentFilter = "all";
    DOM ELEMENTS
 ===================================================== */
 
-const taskInput = document.getElementById("taskInput");
-const priorityInput = document.getElementById("priority");
-const addTaskBtn = document.getElementById("addTaskBtn");
+const taskInput =
+    document.getElementById("taskInput");
 
-const taskList = document.getElementById("taskList");
-const emptyState = document.getElementById("emptyState");
+const priorityInput =
+    document.getElementById("priority");
 
-const searchInput = document.getElementById("searchInput");
+const categoryInput =
+    document.getElementById("category");
+
+const dueDateInput =
+    document.getElementById("dueDate");
+
+const taskNotesInput =
+    document.getElementById("taskNotes");
+
+const addTaskBtn =
+    document.getElementById("addTaskBtn");
+
+const taskList =
+    document.getElementById("taskList");
+
+const emptyState =
+    document.getElementById("emptyState");
+
+const searchInput =
+    document.getElementById("searchInput");
 
 const filterButtons =
     document.querySelectorAll(".filter-btn");
 
+const themeToggle =
+    document.getElementById("themeToggle");
+
+
+/* =====================================================
+   DASHBOARD ELEMENTS
+===================================================== */
+
 const totalTasks =
     document.getElementById("totalTasks");
 
-const activeTasks =
-    document.getElementById("activeTasks");
+const pendingTasks =
+    document.getElementById("pendingTasks");
 
 const completedTasks =
     document.getElementById("completedTasks");
 
-const themeToggle =
-    document.getElementById("themeToggle");
+const progressPercent =
+    document.getElementById("progressPercent");
+
+const progressText =
+    document.getElementById("progressText");
+
+const progressBar =
+    document.getElementById("progressBar");
+
+const todayTaskCount =
+    document.getElementById("todayTaskCount");
+
+const upcomingTaskCount =
+    document.getElementById("upcomingTaskCount");
+
+const overdueTaskCount =
+    document.getElementById("overdueTaskCount");
+
+const highPriorityCount =
+    document.getElementById("highPriorityCount");
 
 
 /* =====================================================
@@ -61,7 +107,9 @@ function saveTasks() {
 
 function addTask() {
 
-    const title = taskInput.value.trim();
+    const title =
+        taskInput.value.trim();
+
 
     if (title === "") {
 
@@ -70,6 +118,7 @@ function addTask() {
         taskInput.focus();
 
         return;
+
     }
 
 
@@ -79,15 +128,22 @@ function addTask() {
 
         title: title,
 
-        priority: priorityInput
-            ? priorityInput.value
-            : "medium",
+        priority:
+            priorityInput.value,
+
+        category:
+            categoryInput.value,
+
+        dueDate:
+            dueDateInput.value || null,
+
+        notes:
+            taskNotesInput.value.trim(),
 
         completed: false,
 
-        createdAt: new Date().toISOString(),
-
-        dueDate: null
+        createdAt:
+            new Date().toISOString()
 
     };
 
@@ -97,7 +153,19 @@ function addTask() {
 
     saveTasks();
 
+
+    /* Clear inputs */
+
     taskInput.value = "";
+
+    taskNotesInput.value = "";
+
+    dueDateInput.value = "";
+
+    priorityInput.value = "medium";
+
+    categoryInput.value = "College";
+
 
     renderTasks();
 
@@ -115,16 +183,22 @@ function addTask() {
 function deleteTask(id) {
 
     const confirmDelete =
-        confirm("Are you sure you want to delete this task?");
+        confirm(
+            "Are you sure you want to delete this task?"
+        );
+
 
     if (!confirmDelete) {
+
         return;
+
     }
 
 
-    tasks = tasks.filter(
-        task => task.id !== id
-    );
+    tasks =
+        tasks.filter(
+            task => task.id !== id
+        );
 
 
     saveTasks();
@@ -142,23 +216,25 @@ function deleteTask(id) {
 
 function toggleTask(id) {
 
-    tasks = tasks.map(task => {
+    tasks =
+        tasks.map(task => {
 
-        if (task.id === id) {
+            if (task.id === id) {
 
-            return {
+                return {
 
-                ...task,
+                    ...task,
 
-                completed: !task.completed
+                    completed:
+                        !task.completed
 
-            };
+                };
 
-        }
+            }
 
-        return task;
+            return task;
 
-    });
+        });
 
 
     saveTasks();
@@ -177,17 +253,21 @@ function toggleTask(id) {
 function editTask(id) {
 
     const task =
-        tasks.find(task => task.id === id);
+        tasks.find(
+            task => task.id === id
+        );
 
 
     if (!task) {
+
         return;
+
     }
 
 
     const newTitle =
         prompt(
-            "Edit your task:",
+            "Edit task:",
             task.title
         );
 
@@ -196,11 +276,14 @@ function editTask(id) {
         newTitle === null ||
         newTitle.trim() === ""
     ) {
+
         return;
+
     }
 
 
-    task.title = newTitle.trim();
+    task.title =
+        newTitle.trim();
 
 
     saveTasks();
@@ -211,20 +294,13 @@ function editTask(id) {
 
 
 /* =====================================================
-   SEARCH
+   GET FILTERED TASKS
 ===================================================== */
 
 function getFilteredTasks() {
 
-    const searchText =
-        searchInput
-            ? searchInput.value
-                .toLowerCase()
-                .trim()
-            : "";
-
-
-    let filtered = [...tasks];
+    let filtered =
+        [...tasks];
 
 
     /* FILTER */
@@ -251,14 +327,43 @@ function getFilteredTasks() {
 
     /* SEARCH */
 
+    const searchText =
+        searchInput
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+            : "";
+
+
     if (searchText !== "") {
 
         filtered =
-            filtered.filter(task =>
-                task.title
-                    .toLowerCase()
-                    .includes(searchText)
-            );
+            filtered.filter(task => {
+
+                const title =
+                    task.title
+                        .toLowerCase();
+
+                const category =
+                    (task.category || "")
+                        .toLowerCase();
+
+                const notes =
+                    (task.notes || "")
+                        .toLowerCase();
+
+
+                return (
+
+                    title.includes(searchText) ||
+
+                    category.includes(searchText) ||
+
+                    notes.includes(searchText)
+
+                );
+
+            });
 
     }
 
@@ -275,7 +380,9 @@ function getFilteredTasks() {
 function renderTasks() {
 
     if (!taskList) {
+
         return;
+
     }
 
 
@@ -288,68 +395,7 @@ function renderTasks() {
 
     if (filteredTasks.length === 0) {
 
-        if (emptyState) {
-
-            emptyState.style.display = "block";
-
-            const heading =
-                emptyState.querySelector("h3");
-
-            const paragraph =
-                emptyState.querySelector("p");
-
-
-            if (searchInput && searchInput.value.trim()) {
-
-                if (heading) {
-                    heading.textContent =
-                        "No tasks found";
-                }
-
-                if (paragraph) {
-                    paragraph.textContent =
-                        "Try searching with another keyword.";
-                }
-
-            } else if (currentFilter === "completed") {
-
-                if (heading) {
-                    heading.textContent =
-                        "No completed tasks";
-                }
-
-                if (paragraph) {
-                    paragraph.textContent =
-                        "Complete a task and it will appear here.";
-                }
-
-            } else if (currentFilter === "active") {
-
-                if (heading) {
-                    heading.textContent =
-                        "No active tasks";
-                }
-
-                if (paragraph) {
-                    paragraph.textContent =
-                        "Great! You have no pending tasks.";
-                }
-
-            } else {
-
-                if (heading) {
-                    heading.textContent =
-                        "Your day is clear!";
-                }
-
-                if (paragraph) {
-                    paragraph.textContent =
-                        "Add a task and start making progress.";
-                }
-
-            }
-
-        }
+        showEmptyState();
 
         return;
 
@@ -358,7 +404,8 @@ function renderTasks() {
 
     if (emptyState) {
 
-        emptyState.style.display = "none";
+        emptyState.style.display =
+            "none";
 
     }
 
@@ -382,6 +429,12 @@ function renderTasks() {
         }
 
 
+        const dueDate =
+            task.dueDate
+                ? formatDueDate(task.dueDate)
+                : "No due date";
+
+
         taskItem.innerHTML = `
 
             <div class="task-content">
@@ -393,21 +446,29 @@ function renderTasks() {
                     onchange="toggleTask(${task.id})"
                 >
 
+
                 <div class="task-info">
 
                     <div class="task-title">
+
                         ${escapeHTML(task.title)}
+
                     </div>
+
 
                     <div class="task-meta">
 
-                        <span>
-                            ${getTaskStatus(task)}
-                        </span>
+                        ${escapeHTML(
+                            task.category || "Other"
+                        )}
 
-                        <span>
-                            ${formatDate(task.createdAt)}
-                        </span>
+                        • ${dueDate}
+
+                        ${task.notes
+                            ? " • " +
+                              escapeHTML(task.notes)
+                            : ""
+                        }
 
                     </div>
 
@@ -418,9 +479,12 @@ function renderTasks() {
 
             <div class="task-actions">
 
-                <span class="priority-badge ${task.priority}">
+                <span
+                    class="priority-badge ${task.priority}"
+                >
                     ${task.priority}
                 </span>
+
 
                 <button
                     class="edit-btn"
@@ -429,6 +493,7 @@ function renderTasks() {
                 >
                     ✏️
                 </button>
+
 
                 <button
                     class="delete-btn"
@@ -443,9 +508,88 @@ function renderTasks() {
         `;
 
 
-        taskList.appendChild(taskItem);
+        taskList.appendChild(
+            taskItem
+        );
 
     });
+
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+function showEmptyState() {
+
+    if (!emptyState) {
+
+        return;
+
+    }
+
+
+    emptyState.style.display =
+        "block";
+
+
+    const heading =
+        emptyState.querySelector("h3");
+
+    const paragraph =
+        emptyState.querySelector("p");
+
+
+    const searchText =
+        searchInput
+            ? searchInput.value.trim()
+            : "";
+
+
+    if (searchText) {
+
+        heading.textContent =
+            "No tasks found";
+
+        paragraph.textContent =
+            "Try another search keyword.";
+
+    }
+
+    else if (
+        currentFilter === "completed"
+    ) {
+
+        heading.textContent =
+            "No completed tasks";
+
+        paragraph.textContent =
+            "Complete a task and it will appear here.";
+
+    }
+
+    else if (
+        currentFilter === "active"
+    ) {
+
+        heading.textContent =
+            "No pending tasks";
+
+        paragraph.textContent =
+            "Great! You have no pending tasks.";
+
+    }
+
+    else {
+
+        heading.textContent =
+            "Your task list is clear!";
+
+        paragraph.textContent =
+            "Add your first task and start making progress.";
+
+    }
 
 }
 
@@ -459,7 +603,8 @@ function escapeHTML(text) {
     const div =
         document.createElement("div");
 
-    div.textContent = text;
+    div.textContent =
+        text;
 
     return div.innerHTML;
 
@@ -467,30 +612,22 @@ function escapeHTML(text) {
 
 
 /* =====================================================
-   TASK STATUS
+   FORMAT DUE DATE
 ===================================================== */
 
-function getTaskStatus(task) {
+function formatDueDate(dateString) {
 
-    if (task.completed) {
+    if (!dateString) {
 
-        return "✓ Completed";
+        return "No due date";
 
     }
 
-    return "○ Pending";
-
-}
-
-
-/* =====================================================
-   FORMAT DATE
-===================================================== */
-
-function formatDate(dateString) {
 
     const date =
-        new Date(dateString);
+        new Date(
+            dateString + "T00:00:00"
+        );
 
 
     return date.toLocaleDateString(
@@ -506,7 +643,24 @@ function formatDate(dateString) {
 
 
 /* =====================================================
-   DASHBOARD STATISTICS
+   GET TODAY DATE
+===================================================== */
+
+function getToday() {
+
+    const today =
+        new Date();
+
+
+    return today
+        .toISOString()
+        .split("T")[0];
+
+}
+
+
+/* =====================================================
+   UPDATE DASHBOARD
 ===================================================== */
 
 function updateDashboard() {
@@ -521,9 +675,24 @@ function updateDashboard() {
         ).length;
 
 
-    const active =
+    const pending =
         total - completed;
 
+
+    let progress = 0;
+
+
+    if (total > 0) {
+
+        progress =
+            Math.round(
+                (completed / total) * 100
+            );
+
+    }
+
+
+    /* TOTAL */
 
     if (totalTasks) {
 
@@ -533,13 +702,17 @@ function updateDashboard() {
     }
 
 
-    if (activeTasks) {
+    /* PENDING */
 
-        activeTasks.textContent =
-            active;
+    if (pendingTasks) {
+
+        pendingTasks.textContent =
+            pending;
 
     }
 
+
+    /* COMPLETED */
 
     if (completedTasks) {
 
@@ -549,56 +722,12 @@ function updateDashboard() {
     }
 
 
-    updateProgress();
+    /* PROGRESS */
 
-}
+    if (progressPercent) {
 
-
-/* =====================================================
-   PROGRESS
-===================================================== */
-
-function updateProgress() {
-
-    const total =
-        tasks.length;
-
-
-    const completed =
-        tasks.filter(
-            task => task.completed
-        ).length;
-
-
-    let percentage = 0;
-
-
-    if (total > 0) {
-
-        percentage =
-            Math.round(
-                (completed / total) * 100
-            );
-
-    }
-
-
-    const progressBar =
-        document.querySelector(
-            ".progress-bar"
-        );
-
-
-    const progressText =
-        document.querySelector(
-            ".progress-header strong"
-        );
-
-
-    if (progressBar) {
-
-        progressBar.style.width =
-            percentage + "%";
+        progressPercent.textContent =
+            progress + "%";
 
     }
 
@@ -606,7 +735,117 @@ function updateProgress() {
     if (progressText) {
 
         progressText.textContent =
-            percentage + "%";
+            progress + "%";
+
+    }
+
+
+    if (progressBar) {
+
+        progressBar.style.width =
+            progress + "%";
+
+    }
+
+
+    updateSmartOverview();
+
+}
+
+
+/* =====================================================
+   SMART OVERVIEW
+===================================================== */
+
+function updateSmartOverview() {
+
+    const today =
+        getToday();
+
+
+    /* TODAY */
+
+    const todayTasks =
+        tasks.filter(task =>
+            task.dueDate === today
+        );
+
+
+    /* UPCOMING */
+
+    const upcomingTasks =
+        tasks.filter(task => {
+
+            return (
+
+                task.dueDate &&
+                task.dueDate > today &&
+                !task.completed
+
+            );
+
+        });
+
+
+    /* OVERDUE */
+
+    const overdueTasks =
+        tasks.filter(task => {
+
+            return (
+
+                task.dueDate &&
+                task.dueDate < today &&
+                !task.completed
+
+            );
+
+        });
+
+
+    /* HIGH PRIORITY */
+
+    const highTasks =
+        tasks.filter(task => {
+
+            return (
+
+                task.priority === "high" &&
+                !task.completed
+
+            );
+
+        });
+
+
+    if (todayTaskCount) {
+
+        todayTaskCount.textContent =
+            todayTasks.length;
+
+    }
+
+
+    if (upcomingTaskCount) {
+
+        upcomingTaskCount.textContent =
+            upcomingTasks.length;
+
+    }
+
+
+    if (overdueTaskCount) {
+
+        overdueTaskCount.textContent =
+            overdueTasks.length;
+
+    }
+
+
+    if (highPriorityCount) {
+
+        highPriorityCount.textContent =
+            highTasks.length;
 
     }
 
@@ -650,7 +889,7 @@ filterButtons.forEach(button => {
 
 
 /* =====================================================
-   SEARCH EVENT
+   SEARCH
 ===================================================== */
 
 if (searchInput) {
@@ -668,7 +907,7 @@ if (searchInput) {
 
 
 /* =====================================================
-   ADD TASK BUTTON
+   ADD BUTTON
 ===================================================== */
 
 if (addTaskBtn) {
@@ -704,7 +943,7 @@ if (taskInput) {
 
 
 /* =====================================================
-   DARK / LIGHT THEME
+   THEME TOGGLE
 ===================================================== */
 
 if (themeToggle) {
@@ -725,7 +964,9 @@ if (themeToggle) {
 
 
             themeToggle.textContent =
-                isLight ? "☀" : "☾";
+                isLight
+                    ? "☀"
+                    : "☾";
 
 
             localStorage.setItem(
@@ -742,7 +983,7 @@ if (themeToggle) {
 
 
 /* =====================================================
-   LOAD SAVED THEME
+   LOAD THEME
 ===================================================== */
 
 function loadTheme() {
@@ -773,10 +1014,28 @@ function loadTheme() {
 
 
 /* =====================================================
-   INITIALIZE APP
+   SET MINIMUM DATE
+===================================================== */
+
+function setMinimumDate() {
+
+    if (dueDateInput) {
+
+        dueDateInput.min =
+            getToday();
+
+    }
+
+}
+
+
+/* =====================================================
+   INITIALIZE
 ===================================================== */
 
 loadTheme();
+
+setMinimumDate();
 
 renderTasks();
 
@@ -784,9 +1043,9 @@ updateDashboard();
 
 
 /* =====================================================
-   CONSOLE MESSAGE
+   SUCCESS MESSAGE
 ===================================================== */
 
 console.log(
-    "TaskFlow loaded successfully 🚀"
+    "TaskFlow is ready 🚀"
 );
