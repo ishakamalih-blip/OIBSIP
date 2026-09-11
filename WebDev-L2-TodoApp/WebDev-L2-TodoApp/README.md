@@ -1,43 +1,78 @@
-# ✨ My Todo App
+# ✅ TaskFlow – Smart To-Do App
 
-A simple and modern Todo List web application built to help users organize their daily tasks efficiently.
+A modern and responsive **To-Do List Web Application** designed to help users organize daily tasks, manage priorities, and track productivity.
 
-## 📌 Features
+🚀 Developed as part of my **OIBSIP Web Development Internship**.
+
+---
+
+## 🌐 Live Demo
+
+👉 **[View TaskFlow Live](https://ishakamalih-blip.github.io/OIBSIP/WebDev-L2-ToDoList/)**
+
+---
+
+## ✨ Features
 
 - ➕ Add new tasks
+- 🎯 Set task priority – Low, Medium & High
 - ✅ Mark tasks as completed
-- 🗑️ Delete tasks
-- 📋 View all tasks
-- 🔄 Filter tasks by:
+- 🔎 Search tasks instantly
+- 📋 Filter tasks by:
   - All
   - Active
   - Completed
-- 🧹 Clear completed tasks
-- 🔢 Task counter
-- 📱 Responsive and user-friendly design
+- 📊 Productivity statistics
+  - Total Tasks
+  - Active Tasks
+  - Completed Tasks
+- 🌙 Dark/Light theme toggle
+- 💾 Task management using JavaScript
+- 📱 Responsive design
+- 🎨 Modern and clean user interface
+- ⚡ Simple and easy-to-use experience
+
+---
+
+## 🖥️ Application Preview
+
+### 📊 Productivity Dashboard
+
+TaskFlow provides a productivity overview showing the total, active, and completed tasks.
+
+### ➕ Task Management
+
+Users can quickly add tasks and assign a priority level.
+
+### 🔎 Search & Filter
+
+Tasks can be searched and filtered according to their current status.
+
+### 🌙 Theme Toggle
+
+The application includes a theme toggle for a comfortable user experience.
+
+---
 
 ## 🛠️ Technologies Used
 
-- HTML5
-- CSS3
-- JavaScript
+| Technology | Purpose |
+|---|---|
+| HTML5 | Application structure |
+| CSS3 | Styling and responsive UI |
+| JavaScript | Functionality and interactions |
+| LocalStorage | Task data persistence |
+| Git | Version control |
+| GitHub | Repository hosting |
+| GitHub Pages | Live deployment |
 
-## 🚀 How to Use
-
-1. Enter your task in the input field.
-2. Click the **+ Add** button.
-3. Your task will be added to the list.
-4. Click the checkbox to mark a task as completed.
-5. Use the **All**, **Active**, and **Completed** buttons to filter tasks.
-6. Click the delete button to remove a task.
-7. Click **Clear Completed** to remove all completed tasks.
+---
 
 ## 📂 Project Structure
 
 ```text
-WebDev-L2-TodoApp/
+Todo-App/
 │
 ├── index.html
 ├── style.css
-├── script.js
-└── README.md
+└── script.js
