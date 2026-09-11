@@ -1,75 +1,90 @@
-# 🌟 Tribute Page
+# 🌸 Savitribai Phule Tribute Page
 
-A beautiful and responsive **Tribute Page** created to honor and showcase the life, achievements, and contributions of an inspiring personality.
+A creative and responsive tribute website dedicated to **Savitribai Phule**, a pioneer of women's education and social reform in India.
 
-🚀 Developed as part of my **OIBSIP Web Development Internship**.
+This project was created as part of the **Oasis Infobyte Web Development and Designing Internship**.
 
 ---
 
-## 🌐 Live Demo
+## 📌 Task
 
-👉 **[View Tribute Page Live](YOUR_LIVE_LINK_HERE)**
+**Level 2 - Task 2: Tribute Page**
+
+---
+
+## 🌷 About the Project
+
+This tribute page celebrates the inspiring journey, contributions, courage and legacy of **Savitribai Phule**.
+
+The website presents her life journey in a modern and creative design, including her early life, education movement, social reforms, achievements, writings and lasting inspiration.
 
 ---
 
 ## ✨ Features
 
-- 🎨 Clean and attractive user interface
+- 🌸 Creative and modern tribute design
+- 👩‍🏫 About Savitribai Phule
+- 📜 Life journey and timeline
+- 🎓 Contribution to women's education
+- ❤️ Social reform and women's empowerment
+- 📚 Books and writings
+- 🏆 Achievements and legacy
+- 💭 Inspirational quotes
+- 🌺 "Why She Inspires Us" section
 - 📱 Fully responsive design
-- 🖼️ Dedicated tribute/hero section
-- 📖 Biography and life journey
-- 🏆 Achievements and contributions
-- 📅 Important timeline/events
-- 💫 Smooth and modern layout
-- 📜 Well-structured content sections
-- ⚡ Fast and lightweight webpage
+- ✨ Smooth hover effects and animations
+- 🖼️ Historical and tribute visuals
+- 🧭 Easy navigation
 
 ---
 
-## 🖥️ Page Sections
+## 🏠 Website Sections
 
-### 🌟 Hero Section
+### 1. Home
+A beautiful hero section introducing Savitribai Phule with an inspirational message.
 
-Introduces the personality with a prominent heading, image, and short description.
+### 2. About Her
+Information about her life, education and social work.
 
-### 📖 About
+### 3. Journey
+A timeline showing important milestones in her life.
 
-Provides important information about the person's life and background.
+### 4. Contributions
+Highlights of her work in:
+- Women's Education
+- Social Reform
+- Equality
+- Women's Empowerment
 
-### 🏆 Achievements
+### 5. Books & Writings
+A section highlighting her literary contribution and writings.
 
-Highlights major achievements, contributions, and milestones.
+### 6. Legacy
+Explains how her work continues to inspire education, equality and social change.
 
-### 📅 Timeline
-
-Displays important events in chronological order.
-
-### 💭 Legacy
-
-Describes the impact and inspiration created by the personality.
+### 7. Her Inspiration
+A section explaining what we can learn from her life:
+- Be Brave
+- Keep Learning
+- Be Kind
+- Create Change
 
 ---
 
-## 🛠️ Technologies Used
+## 💻 Technologies Used
 
-| Technology | Purpose |
-|---|---|
-| HTML5 | Page structure |
-| CSS3 | Styling and responsive design |
-| JavaScript | Interactive functionality |
-| Git | Version control |
-| GitHub | Repository hosting |
-| GitHub Pages | Live deployment |
+- HTML5
+- CSS3
+- JavaScript
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-Tribute-Page/
+WebDev-L2-TributePage/
 │
 ├── index.html
 ├── style.css
 ├── script.js
-└── assets/
-    └── images/
+└── README.md
